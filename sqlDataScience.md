@@ -189,7 +189,7 @@ There are also some potential drawbacks to using graph databases, such as the ne
 
 Some popular graph database systems include Neo4j, Amazon Neptune, and Microsoft Azure Cosmos DB.
 
-### What is a Query?
+#### What is a Query?
 
 In the context of databases, a query is a request for information from a database. It is a way of asking the database it reteieve speeific data based on certain conditions or criteria.
 
@@ -203,7 +203,139 @@ This query is asking the database to retrieve the name, age, and city of all cus
 
 Queries can be used for a variery of purposes; such as gencrating reports, performing analysis, and updating or deleting data. Well-crafted queries can help improve the performance and efficiency of database operations, as they allow you to retrieve only the data you need, and avoid unnecessary processing and resource usage.
 
-What is SQL?
+#### What is SQL?
 
-SQL is a standard language for storing, manipulating, and retrieving data in databases. SQL stands for Struetured Query Language. SQL lets you access and manipulates databases. SQL became a standard of the American National Standards Institute (ANSI) in 1986 and of the International Organfzation for Standardization {IS0} in 1987, 
+SQL is a standard language for storing, manipulating, and retrieving data in databases. SQL stands for Struetured Query Language. SQL lets you access and manipulates databases. SQL became a standard of the American National Standards Institute (ANSI) in 1986 and of the International Organfzation for Standardization {IS0} in 1987.
+
+#### Types Of SQL KEYS
+##### Primary Key
+A primary key is a column or set of columns in a database table that uniquely identifies each row or record in the table. The primary key is used to-enforce data integrity and ensure that each tow in the table is unique and
+identifiable.
+A primary key can be a single column or a combination of columns in the table, and it must have the following
+properties:
+1. Uniqueness: Each value in the primary Key column or columns must be unique and cannot be repeated.
+2. Non-nullability: The value in the primary key column or columns cannot be null or empty.
+3. Immutability: The value in the primary key column or columns should not change over time.
+
+The primary key is used to identify and retrieve specific rows in the table, and it can also be used as a foreign key in other tables to establish relationships between tables.
+It is a best practice to choose a primary key that is simple, numeric, and does not change frequently to ensure efficient indexing and searching. Examples of primary keys include unique identifier columns, such as a customer ID, order ID, or product ID.
+
+##### Foreign Key
+A foreign key is a column or et of columns in a database table that refers to the primary key of another table. The foreign key establishes a relationship between two tables, and it is used to maintain referential integrity and enforce data constraints.
+
+When a foreign key is defined in a table, it refers o the primary key of another table, called the referenced table.
+The foreign key column contains values that match the primary key values of the referenced table, ensuring that each value in the foreign key column is valid and refers to an existing row in the referenced table.
+
+The use of foreign keys ensures that the data in the tables is consistent and accurate. When a record is deleted or updated in the referenced table, the corresponding records fn the table containing the foreign key are also deleted or updated automatically, preventing orphaned or invalid data.
+
+For example, consider a database with two tables: Customers and Orders.
+The Customers table has a primary key column called CustomerID, and the Orders rable has a foreign key column called CustomerID that refers to the  CustomerlD column in the Customers table. This establishes a refationship between the two tables, where each order is associated with a specific customer.
+
+Foreign keys are an essential component of database design and are used o maintain data integrity and consistency in relational databases.
+
+##### Composite Key
+A composite key, also known as a composite primary key, is a combination of two or more columns in a database table that is used to uniquely identify ecach row in the table. Unlike a simple primary kev that consists of a single column, a composite key is made up of multiple columns.
+
+In a composite key, each column in the key contributes to the uniqueness of the key. That is, the combination of values in all the columns must be unique for each row in the table, The columns that make up the composite key can be of any data type, such as integers, strings, or dates.
+
+Composite keys are used when a single column cannot uniquely identify each row in a table. For example, consider a table that stores data about studeats, where the combination of the student’s name and date of birth uniquely identifies each student. In this case, the name and date of birth columns could be combined to form a  composite key for the table.
+
+Composite keys are also used in many-to-many relationships between tables, where the key is composed of foreign keys from two or more tables. In such cases, the composite key is used to enforce the relationship between the tables and ensure data integrity.
+
+While composite keys can be useful in certain situations, they can also be more complex to work with than simple primary keys, and they can make queries and indexing more difficult, As a best practice, it is recommended to use simple primary keys wherever possible and to use composite keys only when necessary to ensure data integrity. 
+
+##### Super Key
+
+In a relational database, a super key is 4 set of one or more columns in a table that uniquely identifies each row in that table. A super key can be thought of as a superset of a primary key, meaning that it includes all of the columns that make up the primary key, as well as additional columns that are not strictly necessary for uniqueness.
+
+For example, consider a table that stores information about employees, with columns for EmployeelD, FirstName, LastName, and Email. The combination of EmployeelD and Email is & super key for this table, as it uniquely identifies each row, even though only EmploveelD is strictly necessary for uniqueness. 
+
+Similarly, the combination of FirstName and LastName is also a super key for this table. Super keys are useful for database design and optimization, as they provide a way to identify potential candidate keys and determine which key should be used as the primary key for a table. They also provide a way to ensure data integrity and eliminate duplicate records.
+
+It is worth noting that not all super keys are suitable for use as primary keys, 4s some may be too complex or inefficient for use in indexing and querying. Primary keys are typically chosen based on their simplicity, efficiency, and suitability for use in indexing and querying.
+
+##### Alternate Key
+
+An alternate key, also known as a candidate key, is a set of one or more columns in a database table that can be used-to uniquely identify each row in the table. Like a primary key, an alternate key is a candidate for use as the unique identifier for a table, but it is not necessarily chosen as the primary key.
+
+In a well-designed relational database, each table should have at least one candidate key, and usually several candidate keys. The primary key is chosen from among the candidate keys based on factors such as simplicity, stability, and efficiency.
+
+For example, in a table that stores information about customers, a candidate key might be the combination of the
+customer’s email address and phone number. This combination of columns is unigue for each customer and can be used as a unigue identifier for the table.
+
+However, it may not be the best choice for a primary key, as email addresses and phone numbers can change over time, which would require updating all related records. Alternate keys are important for data integrity and normalization in a database. By identifving all the candidate keys for a table, a database designer can ensure that data is stored efficiently and without duplication and that each row in the table is uniquely identifiable. 
+
+
+
+#### Introduction To SQL Commands
+Structured Query Language as we know is a query language that can be used to perform certain operations on any existing database to to create a new database and then performing the operations.
+
+SQL uses certain commands like Create, Drop, lnsert, etc to carry out the required tasks. These SQL commands are mainly categorized into four categories:
+
+1. DDL - Data Definition Language 
+2. DQL - Data Query Language 
+3. DML — Data Manipulation Language 
+4. DCL - Data Control Language 
+
+
+### DDL - Data Definition Language
+Data Definition Language (DDL) is a subset of SQL (Structured Query Language) that is used to create and modify the structure of database objects such as tables, indexes, and views. It is used to define and manage the schema or logical structure of a database.
+
+DDL includes commands such as CREATE, ALTER, and DROP, which are used to create, modify, and delete
+database objects. These commands are used to define the data types, constraints, relationships, and other properties
+of the abjects,
+
+Some common DDL commands include:
+* CREATE: This command is used to create new database objects such as tables, indexes, and views.
+* ALTER: This command is used to modify the structure of existing database objects. For example, vou can use
+ALTER to add or remove columns from a table, or to change the data type of a column.
+* DROP: This command is used to delete database objects such as tables, indexes, and views.
+* TRUNCATE: This command is used to remove all data from a table, while leaving the structure of the table intact.
+* COMMENT: This command is used to add comments to database ohjects such as tables, columns, and views. 
+
+DDL commands are typically executed by database administrators, developers, or other users with appropriate permissions to modify the structure of the database. It is important to use DDL commands carefully, as they can have a significant impact on the data stored in the database. 
+
+
+### DQL - Data Query Language
+Data Query Language (DQL) is a subset of SQL (Structured Query Language ) used to retrieve data from a database. It is used to query the contents of tables and views in a database, and to retrieve specific data based on various criteria.
+
+DQL commands include SELECT, which is used to retrieve data from one or more tables or views in a database. The SELECT command can be used with various clauses, such as WHERE, GROUP BY, and ORDER BY, to filter, group, and sort the data retrieved from the database.
+
+Some commuon DQL commands inchede:
++ SELECT: This command is used 1o retrieve data from one or more tables or views in a database. It can be used with various clauses, such as WHERE, GROUP BY, and ORDER BY, to filter, group, and sort the data retrieved from the database.
++ FROM: This clause is used to specify the table or view from which to retrieve data.
++ WHERE: This clayse is used to specify the conditions that the data retrieved must meet. For example, vou can use WHERE to retrieve all rows where a certain column equals a specific value.
+* GROUP BY: This clause is used to group the data retrieved hy one or more columns.
+* HAVING: This clause is used to specify conditions that the grouped data must meet. For example, you can use HAVING to retrieve all groups where the sum of a certain column is greater than a specific value,
++ ORDER BY: This clause is used to sort the data retrieved by one oF more columns.
+
+DQL commands are used by developers and data analysts to retrieve data from a database and to generate reports and analysis based on the retrieved data. It is important to use DQL commands carefully, as incorrect or inefficient queries can have a significant impact on the performance of the database. 
+
+
+### DML — Data Manipulation Language
+Data Manipulation Language (DML) is a subset of SQL (Structured Query Language ) used to manipulate the data stored in a database. It is used to add, update, and delete data in the database, as well as to retrieve data from the database.
+
+DML commands include INSERT. UPDATE, and DELETE, which are used to add, modify, and remove data from the database. DML commands can also be used in conjunction with DQL commands (such as SELECT) 10 retrieve and modify data in the database.
+
+Some common DML commands include:
+*  INSERT: This command is used to add new data to a table in the database, You specify the table name and the values 16 be inserted into the table,
+* UPDATE: This command is used to modify existing data in a table in the database, You specify the table name, the columns 10 he updated, and the pew values for those columns.
+* DELETE: This command is used to remove data from a table in the database, You specify the table name and the conditions that the dats must meet to be deleted.
+* SELECT: This command is used to retrieve data from a table in the database, You specify the columns fo be retrieved and any conditions that the data must meet.
+
+DML commands are used by developers, database administrators, and other users with appropriate permissions to add, modify, and remove data in the database. It is important to use DML commands carefully, as they can have a significant impact on the data stored in the database.
+
+### DCL - Data Control Language
+
+Data Control Language (DCL) is a subset of SQL (Structured Query Language) used ta control access to the data stored in a database. It is used to grant and revoke permissions to access the data, as well as to define and manage roles and users.
+
+DCL commands include GRANT and REVOKE, which are used to grant and revoke permissions to access the data in the database, DCL comminds can alsa be used in conjunction with DQL and DML commands to restrict or grant access to specific tables and data within the database.
+
+Some common DCL commarnds include:
+* GRANT: This command is used to grant specific perniissions to vsers or roles in the database. You specify the type of permission (such as SELECT, INSERT, UPDATE, or lJ}iLE‘l‘E,\f the object (such as a table or view), and the user or role to which the permission is granted.
+* REVOKE: This command is used to revoke specific permissions from users or roles in the database. You specify the type of permission, the object, and the user or role from which the permission is revoked.
+
+DCL commands are used by database administrators and other users with appropriate permissions to control aceess to the data in the database. It is important to use DCL commands carefully, as granting too many permissions can lead to security vulnerabilities, while revoking too many permissions can lead to restricted access and limited functionality. 
+
+
 
