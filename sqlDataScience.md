@@ -337,5 +337,116 @@ Some common DCL commarnds include:
 
 DCL commands are used by database administrators and other users with appropriate permissions to control aceess to the data in the database. It is important to use DCL commands carefully, as granting too many permissions can lead to security vulnerabilities, while revoking too many permissions can lead to restricted access and limited functionality. 
 
+### Data Types in SQL
+
+In MySQL, there are various data types that can be used to define the type of data that can be stored in a column of a table. Some common data types in MySQL include:
+
+Numeric:
+* INT (integer)
+* DECIMAL (fixed-point)
+* FLOAT (floating-point)
+
+String:
+* CHAR (fixed-length string)
+* VARCHAR (variable-length string)
+* TEXT (variable-length string with a maximum length)
+
+Date and Time:
+* DATE (date in 'YYYY-MM-DD' format)
+* TIME (time in 'HH:MM:SS' format)
+* DATETIME (date and time in 'YYYY-MM-DD HH:MM:SS' format)
+
+Boolean:
+* BOOL or BOOLEAN (Boolean value)
+
+Others:
+* BLOB (binary large object)
+* JSON (JSON data)
+
+These are just a few examples of data types available in MySQL. The choice of data type depends on the nature of the data that needs to be stored in the database.
+
+
+
+
+
+##### Comments in MySQL
+
+In MySQL, you can add comments in SQL queries using -- for single-line comments or /* */ for multi-line comments. Here are examples of both:
+
+Single-line comment:
+
+```SELECT * FROM users; -- This is a single-line comment```
+
+Multi Line Comment:
+```
+/*
+This is a multi-line comment
+It can span over multiple lines
+*/
+SELECT * FROM orders;
+```
+
+
+
+### SQL Commands
+Now let us go through the SQL commands one by one to get a better understanding of them. Make sure to run them in your computer to get a better understanding. Or you can try any online compiler to test out the commands and play around with them. I use [OneCompiler](https://onecompiler.com/mysql) for trying out the commands.
+
+
+##### Creating Databases
+The CREATE DATABASE is used to create a new database. Make sure you have admin privilege before creating any database. 
+
+Use SHOW DATABASE command to show all the databases you have.
+Syntax : CREATE DATABASE table_name;
+Example: `CREATE DATABASE testdb:` also `show database` to test if the database is created successfully.
+
+##### Deleting Databases (DROP)
+The DROP DATABASE is used to drop a new database. Make sure you have admin privilege before dropping(deleting) any database. 
+
+Use SHOW DATABASE command to show all the databases you have.
+Syntax : DROP DATABASE table_name;
+Example: `DROP DATABASE testdb:` also `show database` to test if the database is deleted successfully.
+
+
+##### Creating SQL Tables
+The CREATE TABLE is used to create a new table. Make sure you have admin privilege before creating table in the database.
+Syntax: `CREATE TABLE table_name;`
+Example: `CREATE TABLE testTable;`
+
+Creating table employee with create command:
+```
+-- create
+CREATE TABLE EMPLOYEE (
+  empId INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  dept TEXT NOT NULL
+);
+```
+
+##### Deleting SQL Tables
+The DROP TABLE is used to delete a  table. Make sure you have admin privilege before deleting table in the database.
+Syntax: `DROP TABLE table_name;`
+Example: `DROP TABLE testTable;`
+
+Be careful before deleting any table. Deleting the table will result in complete loss of the data.
+
+##### Truncate SQL Tables
+The TRUNCATE TABLE is used to delete data inside a table. Make sure you have admin privilege before truncating table in the database.
+Syntax: `TRUNCATE TABLE table_name;`
+Example: `TRUNCATE TABLE testTable;`
+
+Be careful before deleting data in any table. 
+
+##### Altering data in SQL Tables
+
+The ALTER keyword is used as part of the Data Definition Language (DDL) to modify existing database objects like tables, views, or databases.
+
+For example, you can use ALTER TABLE to add, modify, or drop columns in a table, change the data type of a column, add constraints, or rename a table.
+
+Here is an example of using ALTER TABLE to add a new column to an existing table: 
+
+```ALTER TABLE users
+ADD COLUMN email VARCHAR(255);
+```
+We can use DROP and MODIFY in place of ADD for dropping and modifiying column name.
 
 
