@@ -449,4 +449,110 @@ ADD COLUMN email VARCHAR(255);
 ```
 We can use DROP and MODIFY in place of ADD for dropping and modifiying column name.
 
+### Primary Key
+A primary key is a column or set of columns in a table that uniquely identifies each row or record in the table. The primary key is used to enforce data integrity and ensure that each row in the table is unique and identifiable.
+
+Here is an example of creating a table with a primary key:
+
+CREATE TABLE person (
+    id INT PRIMARY KEY,
+    name VARCHAR(255),
+    address VARCHAR(255)
+);
+In this statement:
+
+* CREATE TABLE person creates a new table named person.
+* id INT PRIMARY KEY defines the id column as the primary key of the table.
+* name VARCHAR(255) defines the name column as a variable-length string with a maximum length of 255 characters.
+* address VARCHAR(255) defines the address column as a variable-length string with a maximum length of 255 characters.
+
+After executing this statement, the person table will be created with the specified columns and primary key
+
+### Foreign Key
+
+In SQL, a foreign key is a constraint that establishes a relationship between two tables. It ensures the referential integrity of the data by enforcing a link between the data in two tables.
+
+Here is an example of using a foreign key in SQL:
+
+Let's say we have two tables: orders and customers. Each order in the orders table belongs to a specific customer in the customers table. We can create a foreign key constraint on the customer_id column in the orders table to reference the id column in the customers table.
+
+Here is how you can create these tables and define the foreign key relationship:
+```
+CREATE TABLE customers (
+    id INT PRIMARY KEY,
+    name VARCHAR(255)
+);
+
+CREATE TABLE orders (
+    id INT PRIMARY KEY,
+    order_number VARCHAR(10),
+    customer_id INT,
+    FOREIGN KEY (customer_id) 
+    REFERENCES customers(id)
+);
+```
+In this example:
+
+* The customers table has columns id and name, with id as the primary key.
+* The orders table has columns id, order_number, and customer_id, with id as the primary key.
+* The customer_id column in the orders table is a foreign key that references the id column in the customers table. This ensures that every customer_id in the orders table must exist in the id column of the customers table.
+
+By using foreign keys, you can maintain the integrity of the data and establish relationships between tables in a database.
+
+### INSERT INTO command
+
+We will use the create table command here first to create the table we want to add data to. And then we will add data using the INSERT INTO command.
+```
+-- create
+CREATE TABLE EMPLOYEE (
+  empId INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  dept TEXT NOT NULL
+);
+
+-- insert
+INSERT INTO EMPLOYEE (empId, name, dept) VALUES (0001, 'Clark', 'Sales');
+INSERT INTO EMPLOYEE (empId, name, dept) VALUES (0002, 'Dave', 'Accounting');
+INSERT INTO EMPLOYEE (empId, name, dept) VALUES (0003, 'Ava', 'Sales');
+```
+If you are adding values for all the columns of the table, you do not need to specify the column names in the SQL query. However, make sure the order of the values is in the same order as the columns in the table.
+
+**Insert Data Only in Specified Columns**
+It is also possible to only insert data in specific columns.We need to specify the columns and data associated with it.
+```
+INSERT INTO EMPLOYEE (empId, name) VALUES (0003, 'Ava');
+```
+**Insert Multiple Rows**
+
+It is also possible to insert multiple rows in one statement.
+
+To insert multiple rows of data, we use the same INSERT INTO statement, but with multiple values:
+```
+INSERT INTO EMPLOYEE (empId, name, dept) VALUES
+    (0004, 'Lily', 'Marketing'),
+    (0005, 'Fin', 'Sales'),
+    (0006, 'Ken', 'Accounting'),
+    (0007, 'Raj', 'IT');
+```
+
+### SELECT Command
+
+The SELECT command is used to retrieve data from one or more tables in the database.
+
+The basic syntax of the SELECT command is as follows:
+
+`SELECT column_name(s) FROM table_name;`
+
+To select all column name from a table, we provide * after the select keyword.
+
+`select * from table_name`
+
+To fetch employee Id and name from the above employee table we will simply query:
+
+`SELECT empId,name from EMPLOYEE;`
+
+To fetch all data from the employee table we will use:
+
+`select * from EMPLOYEES;`
+
 
