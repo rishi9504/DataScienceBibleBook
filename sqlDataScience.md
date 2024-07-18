@@ -556,3 +556,415 @@ To fetch all data from the employee table we will use:
 `select * from EMPLOYEES;`
 
 
+### WHERE Command
+
+
+The WHERE clause is used in SQL to filter records based on a specified condition. 
+
+The WHERE clause is used to specify the conditions that the data must meet to be included in the result set.
+
+In the SELECT statement, the WHERE clause is used to apply the filter to the data. Only the records that meet the specified condition are returned.
+
+The WHERE clause is typically used with the SELECT, UPDATE, DELETE, and INSERT statements.
+```
+SELECT column_name(s) FROM table_name WHERE condition;
+```
+
+Here is an example:
+
+`SELECT empId,name from EMPLOYEE where dept='Sales';`
+
+This will fetch the employees working in the sales department.
+
+### ORDER BY Command
+
+
+The ORDER BY clause is used to sort the data retrieved by one or more columns. The columns are listed in the ORDER BY clause, and the optional ASC or DESC keyword is used to specify the sorting order (ascending or descending).
+
+Here is an example:
+
+`SELECT empId,name from EMPLOYEE ORDER BY empId ASC;`
+
+This will fetch the employees sorted by employee Id in ascending order.
+
+To sort in descending order:
+
+`SELECT empId,name from EMPLOYEE ORDER BY empId DESC;`
+
+This will fetch the employees sorted by employee Id in descending order.
+
+You can also sort by multiple columns:
+
+`SELECT empId,name,dept from EMPLOYEE ORDER BY dept ASC, empId DESC;`
+
+This will fetch the employees sorted by department in ascending order and then by employee Id in descending order.
+
+### UPDATE Statement in SQL
+
+The UPDATE statement is used to modify the existing records in a table.
+
+The UPDATE statement is used to update existing records in a table. It can be used to update one or more columns in a table.
+
+The basic syntax of the UPDATE statement is as follows:
+
+`UPDATE table_name SET column1=value1, column2=value2 WHERE condition;`
+
+The UPDATE statement is typically used with the WHERE clause to specify which records to update. The WHERE clause can be used to specify the conditions that the records must meet to be updated.
+
+For example:
+
+`UPDATE EMPLOYEE SET salary=100000 WHERE dept='Sales';`
+
+This will update the salary of all employees in the sales department to $100,000.
+
+**Note:**
+
+Remember it will update existing records only. Add salary in our emmployee table to use the above query.
+
+`alter table EMPLOYEE add salary varchar(255);`
+
+### DELETE Statement
+
+The DELETE statement is used to delete records from a table.
+
+The basic syntax of the DELETE statement is as follows:
+
+`DELETE FROM table_name WHERE condition;`
+
+The DELETE statement is typically used with the WHERE clause to specify which records to delete. The WHERE clause can be used to specify the conditions that the records must meet to be deleted.
+
+For example:
+
+`DELETE FROM EMPLOYEE WHERE empId='123';`
+
+This will delete the employee with empId '123' from the EMPLOYEE table.
+
+**Note:**
+
+This will delete the records permanently. To delete records temporarily, you can use the TRUNCATE TABLE statement.
+
+### LIMIT Statement
+
+The LIMIT clause is used to limit the number of rows returned by a query.
+
+The basic syntax of the LIMIT clause is as follows:
+```
+SELECT column_name(s)
+FROM table_name
+WHERE condition
+LIMIT number;
+```
+
+For example,
+
+`SELECT * FROM EMPLOYEE LIMIT 3;`
+
+What if we want to select records 4-6 inclusively? We can use OFFSET command with limit to achieve this.
+
+`SELECT * FROM EMPLOYEE LIMIT 3 OFFSET 3;`
+
+### MIN Command
+
+The MIN statement in SQL is used to find the minimum value in a set of values.
+
+The basic syntax of the MIN statement is as follows:
+
+`SELECT MIN(column_name) FROM table_name;`
+
+For example:
+
+`SELECT MIN(salary) FROM EMPLOYEE;`
+
+This will return the minimum salary from the EMPLOYEE table.
+
+### MAX Command
+
+The MAX statement in SQL is used to find the maximum value in a set of values.
+
+The basic syntax of the MAX statement is as follows:
+
+`SELECT MAX(column_name) FROM table_name;`
+
+For example:
+
+`SELECT MAX(salary) FROM EMPLOYEE;`
+
+This will return the maximum salary from the EMPLOYEE table.
+
+### COUNT Statement
+
+The COUNT statement in SQL is used to count the number of rows in a table that meet a specified condition. It is often used in combination with the WHERE clause to filter the results.
+
+The basic syntax of the COUNT statement is as follows:
+
+`SELECT COUNT(*) FROM table_name WHERE condition;`
+
+For example:
+
+`SELECT COUNT(*) FROM EMPLOYEE WHERE dept='Sales';`
+
+This will return the number of employees in the sales department.
+
+### AVG Statement
+
+The AVG statement in SQL is used to calculate the average value in a set of values.
+
+The basic syntax of the AVG statement is as follows:
+
+`SELECT AVG(column_name) FROM table_name;`
+
+For example:
+
+`SELECT AVG(salary) FROM EMPLOYEE;`
+
+This will return the average salary from the EMPLOYEE table.
+
+
+### SUM Statement
+
+
+The SUM statement in SQL is used to calculate the total sum of a set of values.
+
+The basic syntax of the SUM statement is as follows:
+
+`SELECT SUM(column_name) FROM table_name;`
+
+For example:
+
+`SELECT SUM(salary) FROM EMPLOYEE;`
+
+This will return the total salary from the EMPLOYEE table.
+
+### LIKE Operator
+
+The LIKE operator in SQL is used to search for a specified pattern in a column.
+
+The basic syntax of the LIKE operator is as follows:
+```
+SELECT column_name(s) FROM table_name WHERE column_name LIKE pattern;
+```
+
+The 'pattern' can include wildcards like '%' to represent zero or more characters, or '_' to represent a single character.
+
+For example:
+```
+SELECT * FROM employees WHERE last_name LIKE 'Sm%';
+```
+This query will return all employees whose last names start with 'Sm'.
+
+### IN Operator
+
+The IN operator in SQL is used to select records where the value of one column is equal to any value in a list of values.
+
+The basic syntax of the IN operator is as follows:
+
+`SELECT column_name(s) FROM table_name WHERE column_name IN (value1, value2, ...);`
+
+For example:
+
+`SELECT * FROM employees WHERE department IN ('Sales', 'Finance', 'HR');`
+
+This query will return all employees who work in the Sales, Finance, or HR department.
+
+The IN operator can be very useful when you want to return records that match any value in a list of values.
+
+### BETWEEN Operator
+
+The BETWEEN operator in SQL is used to select records where the value of one column is within a range of values.
+
+The basic syntax of the BETWEEN operator is as follows:
+
+`SELECT column_name(s) FROM table_name WHERE column_name BETWEEN value1 AND value2;`
+
+The BETWEEN operator can be used to select records where the value of a column is within a specific range of values. The range is specified by the two values that are placed between the BETWEEN operator.
+
+For example:
+
+`SELECT * FROM employees WHERE salary BETWEEN 30000 AND 60000;`
+
+This query will return all employees whose salary is between $30,000 and $60,000.
+
+### ALIASES in MySQL
+
+An alias in SQL is a temporary name given to a table or column in a SQL statement. It allows you to refer to the table or column using a shorter or more meaningful name.
+
+The basic syntax for creating an alias is as follows:
+
+`SELECT column_name AS alias_name FROM table_name;`
+
+For example:
+
+`SELECT employee_id AS emp_id FROM employees;`
+
+This query will return the employee_id column from the employees table, but it will be displayed as emp_id in the result set.
+
+You can also use the AS keyword to create an alias for a column in a SELECT statement.
+
+Note that aliases are only valid within the scope of a single SQL statement. They cannot be used in other SQL statements or subqueries.
+
+
+### GROUP BY Statement in SQL
+
+The GROUP BY statement in SQL is used to group rows that have the same values in one or more columns. The GROUP BY statement is often used with aggregate functions to group and summarize data.
+
+The basic syntax of the GROUP BY statement is as follows:
+
+`SELECT column_name, aggregate_function(column_name) FROM table_name GROUP BY column_name;`
+
+For example:
+
+`SELECT department, AVG(salary) FROM employees GROUP BY department;`
+
+This query will return the average salary for each department in the employees table.
+
+The GROUP BY statement groups the rows by the specified column(s). The aggregate function(s) (such as SUM, AVG, COUNT, etc.) are then applied to each group to calculate the desired summary information.
+
+Note that when using the GROUP BY statement, all non-aggregated columns in the SELECT statement must either be included in the GROUP BY clause or be part of an aggregate function.
+
+
+### HAVING clause in SQL
+
+The HAVING clause is used in conjunction with the GROUP BY clause to specify conditions that the grouped data must meet. It is often used to filter the groups that are returned by the GROUP BY clause.
+
+The basic syntax of the HAVING clause is as follows:
+
+`SELECT column_name(s) FROM table_name GROUP BY column_name(s) HAVING condition;`
+
+For example:
+
+`SELECT department, AVG(salary) FROM employees GROUP BY department HAVING AVG(salary) > 50000;`
+
+This query will return the average salary for each department in the employees table, but only the departments with an average salary greater than $50,000.
+
+Note that the HAVING clause is used to specify conditions on the groups returned by the GROUP BY clause, while the WHERE clause is used to specify conditions on the individual rows in the table before they are grouped.
+
+### EXISTS operator in SQL
+
+The EXISTS operator is used in SQL to check if a subquery returns at least one row. It is used in the WHERE clause of a query and returns a Boolean value.
+
+The basic syntax of the EXISTS operator is as follows:
+
+`SELECT * FROM table_name WHERE EXISTS (subquery);`
+
+For example:
+
+`SELECT * FROM customers WHERE EXISTS (SELECT id FROM orders WHERE customer_id = customers.id);`
+
+This query will return all the rows in the customers table where there is at least one corresponding row in the orders table for that customer.
+
+Note that the EXISTS operator does not return the actual rows from the subquery, it only checks if the subquery returns any rows. 
+
+The opposite of the EXISTS operator is NOT EXISTS, which is used to check if a subquery does not return any rows. The syntax is the same, but with the NOT keyword added before EXISTS. 
+
+For example:
+
+`SELECT * FROM customers WHERE NOT EXISTS (SELECT id FROM orders WHERE customer_id = customers.id);`
+
+This query will return all the rows in the customers table where there are no corresponding rows in the orders table for that customer.
+
+### ANY operator in SQL
+
+The ANY operator is used in SQL to return a Boolean value if any of the subquery values meet the condition.
+
+The basic syntax of the ANY operator is as follows:
+
+`SELECT * FROM table_name WHERE condition ANY (subquery);`
+
+For example:
+
+`SELECT * FROM customers WHERE salary > ANY (SELECT salary FROM employees);`
+
+This query will return all the rows in the customers table where the salary is greater than any of the salaries in the employees table.
+
+Note that the ANY operator is similar to the EXISTS operator, but it returns a Boolean value if any of the subquery values meet the condition, while the EXISTS operator returns a Boolean value if any rows are returned by the subquery.
+
+### ALL operator in SQL
+
+The ALL operator is used in SQL to return a Boolean value if all of the subquery values meet the condition.
+
+The basic syntax of the ALL operator is as follows:
+
+`SELECT * FROM table_name WHERE condition ALL (subquery);`
+
+For example:
+
+`SELECT * FROM customers WHERE salary > ALL (SELECT salary FROM employees);`
+
+This query will return all the rows in the customers table where the salary is greater than all of the salaries in the employees table.
+
+Note that the ALL operator is similar to the ANY operator, but it returns a Boolean value if all of the subquery values meet the condition, while the ANY operator returns a Boolean value if any rows are returned by the subquery.
+
+
+### CASE Statement in SQL
+
+The CASE statement is used to conditionally evaluate an expression and return a result based on the conditions.
+
+The basic syntax of the CASE statement is as follows:
+```
+CASE
+    WHEN condition1 THEN result1
+    WHEN condition2 THEN result2
+    WHEN condition3 THEN result3
+END    
+```
+
+For example:
+```
+-- 
+```
+
+### IS NULL & IS NOT NULL Operator
+A field with a NULL value is a field with no value. If a fiekd in a table is optional, it is possible to insert a new record or update a record without adding a value to this field. Then, the field will be saved with a NULL value,
+
+Note: A NULL value is different from a zero value or a field that contains spaces. A field with a NULL value is one that has been left blank during recond creation.
+
+This not possible to test for NULL values with comapirison operators, such as =, <, or >, We will have to use the IS NULL and IS NOT NULL operators instead. :
+
+IS NULL Syntax:
+```
+SELECT column_pames.
+FROM table_name
+WHERE column_name IS NULL;
+```
+IS NOT NULL Syntax
+```
+SELECT column_pames
+FROM table_name
+WHERE column_name IS NOT NULL;
+```
+Example:
+```
+SELECT CustomerName, ContactName, Address
+FROM Customers
+WHERE Address IS NULL; 
+```
+
+### Introduction to SQL Joins
+
+A JOIN clause is used 1o combine rows from two or mere tables, based on a related column between them. There are 4 different types of SQL joins:
++ SQL INNER JOIN (sometimes called simple join)
+* SQLLEFT OUTER JOIN (sometimes called LEFT JOINY
+* SQL RIGHT OUTER FOIN (sometimes called RIGHT JOIN)
++ SQL FULL QUTER JOIN (sometimes called FULL JOIN) 
+
+### Joining Across Multiple Databases
+SQL Server allows you to join tables from different databases as long as those databases are on the same server. The join syntax is the same; the only difference is that you must fully qualify table names.
+
+Let’s suppose you have two databases on the same server - Db and Db2. Db1 has a table called Clients with a column Clientld and Db2 has a table called Messages with a colurn Clientld (lets leave aside why those tables are in differcnt databases ).
+
+Now, to perform a join on the above-mentioned tables you will be using this query:
+
+```
+select * from Db1.dbo.Clients c join Db2.dbo Messages on c.Clientld = m.Clientld;
+```
+### Joining Table to Itself
+
+
+Also known as self join, we join table from itself.
+Syntax
+```
+SELECT column_name(s)
+FROM tablel T1, tablel T2
+WHERE condition; 
+```
+
