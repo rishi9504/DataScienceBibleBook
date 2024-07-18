@@ -967,4 +967,231 @@ SELECT column_name(s)
 FROM tablel T1, tablel T2
 WHERE condition; 
 ```
+T1and T2 are different table aliases for the same table.
+Example
+```
+SELECT A.CustomerName AS CustomerNamel,
+B.CustomerName AS CustomerName2, A.City
+FROM Customers A, Customers B
+WHERE A.CustomerlD = B.CustomerlD
+AND A.City = B.City
+ORDER BY A.City;
+```
+### Joining Across Multiple SQL Tables
+An SQL query can JOIN multiple tables. For each new table an extra JOIN condition is added. Multi-Table JOINs
+work with SELECT, UPDATE, and DELETE queries.
+Example:
+```
+SELECT Orders.OrderlD, Customers.CustomerName, Shippers.ShipperName
+FROM (Orders INNER JOIN Customers ON Orders.CustomerID = Customers. CustomerID)
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID); 
+```
 
+Left and Right Joins
+The LEFT JOIN keyword returns all records from the left table (table1), and the matching records from the right table (table2), The result is O records from the right side, if there is no match.
+
+Syntax
+```
+SELECT column_name{s)
+FROM tablel
+LEFT JOIN table2
+ON tablel.column_name = table2 column_name:
+```
+Note: In some databases LEFT JOIN is called LEFT OUTER JOIN.
+Example:
+```
+SELECT Customers,CustomerName, Orders.OrderID
+FROM Customers
+LEFT JOIN Orders ON Customers.CustomerlD = Ordérs. CustomerID
+ORDER BY Customers.CustomerNames
+```
+The RIGHT JOIN keyword returns all records from the right table (table2), and the matching records from the left table (table1). The result is 0 records from the left side, if there is no match.
+
+Syntax
+```
+SELECT column_name{s)
+FROM table1
+RIGHT JOIN table2
+ON tablel.column_name = table2.column_name;
+```
+Note: Tn some databases RIGHT JOIN is called RIGHT OUTER JOIN.
+
+Example
+```
+SELECT Orders.OrderlD, Employees LastName, Employees FirstName 
+FROM Orders
+RIGHT JOIN Employees ON Orders EmployeelD = Employees Employeel D
+ORDER BY Orders.OrderlD; 
+```
+
+
+### Window Functions
+
+Window functions perform a calculation across a set of rows that are related to the current row. They are often used to calculate aggregated values based on a range of rows.
+
+```
+function(expression|column) OVER(
+	[ PARTITION BY expr_list optional]
+    [ ORDER BY order_list optional]
+)
+```
+A window function is a function that operates on a set of rows that are related to the current row. The OVER keyword is used to specify the window over which the function operates.
+
+The PARTITION BY clause is used to partition the rows into groups. The ORDER BY clause is used to order the rows within each group.
+
+The expression|column is the function or column that is being applied to the window.
+
+Here's an example of how this code might be used:
+```
+SELECT column1, sum(column2) OVER(PARTITION BY column1 ORDER BY column3) AS running_sum
+FROM table_name
+
+```
+
+This query calculates the running sum of column2 for each value of column1, ordered by column3.
+
+Let's understand it by creating a new table,inserting some data and then apply window functions to see how we can use them.
+
+```
+CREATE TABLE student_score (
+  student_id SERIAL PRIMARY KEY,
+  student_name VARCHAR(30),
+  dep_name VARCHAR(40),
+  score INT
+);
+
+INSERT INTO student_score VALUES (1, 'Ibrahim', 'Computer Science', 80);
+INSERT INTO student_score VALUES (2, 'Taiwo', 'Microbiology', 76);
+INSERT INTO student_score VALUES (3, 'Nurain', 'Biochemistry', 80);
+INSERT INTO student_score VALUES (4, 'Joel', 'Computer Science', 90);
+INSERT INTO student_score VALUES (5, 'Mustapha', 'Industrial Chemistry', 78);
+INSERT INTO student_score VALUES (6, 'Muritadoh', 'Biochemistry', 85);
+INSERT INTO student_score VALUES (7, 'Yusuf', 'Biochemistry', 70);
+INSERT INTO student_score VALUES (8, 'Habeebah', 'Microbiology', 80);
+INSERT INTO student_score VALUES (9, 'Tomiwa', 'Microbiology', 65);
+INSERT INTO student_score VALUES (10, 'Gbadebo', 'Computer Science', 80);
+INSERT INTO student_score VALUES (11, 'Tolu', 'Computer Science', 67);
+```
+
+Run the above code to create a new table first.
+
+Let's say if we want to compare the minimum score and maximum score from all the records in the table we created earlier. You can do that using a window function as shown below.  
+
+Remember that not specifying a partition clause in the OVER clause will cause all the windows to span through the entire dataset.
+```
+SELECT 
+	*,
+	MAX(score) OVER() AS maximum_score,
+	MIN(score) OVER() AS minimum_score
+	
+FROM student_score;
+
+```
+
+Also, note that the above query can be also achieved using subqueries like this:
+```
+SELECT *,
+	(SELECT MAX(score) FROM student_score) AS maximum_score,
+	(SELECT MIN(score) FROM student_score) AS minimum_score
+FROM student_score;
+```
+
+**Run both the queries and check the result.**
+
+### How to Use the ROW_NUMBER Function
+You use ROW_NUMBER() to assign serial numbers to records in a window. Say we want to assign serial numbers to the records in a partition. For example, we want to add row numbers to the dataset based on their names in alphabetical order. You can do that using the following code:
+```
+SELECT
+	*,
+	ROW_NUMBER() OVER(ORDER BY student_name) AS name_serial_number
+FROM student_score;
+```
+
+### How to Use the RANK Function
+
+RANK(), as the name implies, lets you rank observations in a window but with gaps. Let's see what this means:
+```
+SELECT
+	*,
+	RANK()OVER(PARTITION BY dep_name ORDER BY score DESC)	
+FROM student_score;
+```
+
+As you can see in the above code, the result set was partitioned into different windows based on the department column. Then we used the ORDER BY clause to sort the student records based on their score in descending order in each partition. After that, we applied the RANK function.
+
+### How to Use the DENSE_RANK Function
+DENSE_RANK is similar to RANK except that it ranks observations in a window without gaps.
+```
+SELECT
+	*,
+	DENSE_RANK()OVER(PARTITION BY dep_name ORDER BY score DESC)	
+FROM student_score;
+```
+
+### How to Use the LAG Function
+LAG is used to return the offset row before the current row within a window. By default it returns the previous row before the current row.
+
+You typically use LAG when you want to compare the value of a previous row with the current row. It's commonly applied in time-series analysis. For example:
+```
+SELECT
+	*,
+	LAG(score) OVER(PARTITION BY dep_name ORDER BY score)	
+FROM student_score;
+```
+
+### How to Use the Frame Clause in ORDER BY
+Now you've learned some common window functions you might work with on a daily basis. So let's move on to learning another key concept related to the ORDER BY clause called the frame clause.
+
+A frame clause, as the name implies, provides the frame (that is, the set of rows in a window) on which the function is to be applied. You use it to provide the offset of rows to be included or calculated with the current row (that is, the rows before or after the current row – the SQL engine process row one after the other).
+
+Now before we look into how to specify a frame clause, let's look at some of the frame clause's assumptions:
+
+1. First, a frame clause does not apply to ranking functions. The ranking function only ranks the observation in the window based on the ORDER BY clause.
+2. When using an aggregate window function, you may not include the ORDER BY clause. But when you use the ORDER BY clause, it's a best practice to specify the frame clause for accurate results. What this means is say you want to use an aggregate window function and you want to also order the observations in that window by a column. It's best practice is to specify a frame clause so that you will get an accurate result. But if you are not ordering the observations in the window when using an aggregate function, you don't need to specify a frame clause.
+
+
+You can specify a frame clause using two things – ROWS and RANGE. But in this part you will learn how to use the ROWS keyword since it is commonly used to specify a frame clause. 
+
+The ROWS clause defines the frame in terms of the physical offset rows from the current rows. That is, it is used to specify the rows that will be used in conjunction with the current row for calculation.  
+
+For example the following frame clause ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING defines a frame that includes the current row, 1 row preceding it and 1 row following it.
+
+Let's look at the keywords that you can use in conjunction with the ROWS clause:
+
+1. N PRECEDING is a keyword you use to specify the N rows that will be included in the calculation along with the current row. For example 3 PRECEDING means 3 rows preceding the current row.
+2. N FOLLOWING works like N PRECEDING excepts that it works in an opposite manner. N FOLLOWING specifies the numbers of row after the current row.
+3. UNBOUNDED PRECEDING means all rows before the current row.
+4.  UNBOUNDED FOLLOWING means all rows after the current row.
+5. CURRENT ROW is used to specify the current row.
+
+For example, let's look at the below frame clause:
+
+ROWS BETWEEN 2 PRECEDING AND CURRENT ROW will use less than or equal to 2 rows before the current row, along with the current row for the calculation.
+
+**Frame clause example**
+
+Let's look at an example. Say for instance you want to get the cumulative sum of all the student scores. You can do that by using a frame clause.
+
+So first, to be able to do this, you need to first know the types of keywords you will specify in the frame clause.
+
+Since you want to sum up all rows before the current row and the current row itself, you can use the UNBOUNDED PRECEDING keyword. Remember that this gets all rows before the current row and also uses the current row itself.
+
+So the code to achieve that task is shown below:
+```
+SELECT
+	*,
+	SUM(score)OVER(ORDER BY student_id ROWS
+     BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+     AS cummulative_sum
+FROM student_score
+```
+
+Let's break down the window function code:
+```
+SUM(score)OVER(ORDER BY student_id ROWS 
+BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+ AS cummulative_sum
+```
+Firstly in the OVER() clause, we sort the entire window – which is the whole dataset – using the student id.
+
+Then we specify the frame clause which is ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW. This is all rows before the current row and the current row will be used for calculation.
