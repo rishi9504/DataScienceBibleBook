@@ -1195,3 +1195,81 @@ BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
 Firstly in the OVER() clause, we sort the entire window – which is the whole dataset – using the student id.
 
 Then we specify the frame clause which is ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW. This is all rows before the current row and the current row will be used for calculation.
+
+### Introduction to Triggers
+A trigger is a special type of stored procedure that automatically runs when an event occurs in the database server.
+
+DML trigggers runs when a user tries to modify data through a data manipulation language (DML) eveat. DML events like INSERT, UPDATE, or DELETE statements on a table or view.
+
+DML triggers are frequently used for enforcing business rules and data integrity. SQL Server provides declarative referential integrity (DRI) through the ALTER TABLE and 'CREATE TABLE statements.However, DRI doesn't provide cross-database referential integrity. Referential integrity refers to the rules about the relationships between the primary and foreign keys of tables. To enforce referential integrity, use the PRIMARY KEY and FOREIGN KEY constraints in ALTER TABLE and CREATE TABLE. 
+
+**BEFORE Insert Triggers**
+
+MySQL BEFORE INSERT triggers are automatically fieed before an losert event occurs on the table. The following illustrates the basic syatax of creating a MySQL BEFORE INSERT trigger:
+```
+CREATE TRIGGER trigger_name
+BEFORE INSERT
+ON table_name FOR EACH ROW
+trigger_body;
+```
+
+In this syntax:
+First, specify the name of the trigger that you want to create in the CREATE TRIGGER clause. Second, use the BEFORE INSERT clause to specify the time to imvoke the trigger. Third, specify the name of the table that the trigger is associated with after the ON keyword. Finally, specify the trigger body which continuing one or more SQL statements that execute when the trigger is invoked.
+
+Note that ina BEFORE INSERT trigger, you can access and change the NEW values. However, you cannot access
+the OLD values because OLD values obviously do not exist.
+
+**AFTER Insert Trigger**
+MySQL AFTER INSERT triggers are automatically invoked after an insert event oceurs on the table. The following shows the basic syntax of creating a MySQL AFTER INSERT trigger:
+```
+CREATE TRIGGER trigger_name
+AFTER INSERT
+ON table_name FOR EACH ROW
+trigger_body
+```
+
+In this syntax:
+* First, specify the name of the trigger that you want to create after the CREATE TRIGGER keywords.
+* Second, use the AFTER INSERT clause to specify the time to invoke the trigger.
+* Third, specify the name of the table on which you want to create the trigger after the ON keyword.
+* Finally. specify the trigger body which consists of one or more statements that execute when the trigger is
+inveked. 
+
+**DROP Triggers**
+
+The DROP TRIGGER statement deletes a trigger from the database, Here is the basic svntax of the DROP TRIGGER statement:
+
+DROP TRIGGER | IF EXISTS | | schema_name. Trigger_name;
+
+In this syntax:
+* First, specify the name of the frigger that vou want to drop after the DROP TRIGGER kevwords,
++ Second, specify the name of the schema to which the trigger belongs. §f you skip the schema name, the statement will drop the trigger in the current database.
++ Third, use the IF EXISTS option o conditionally drops the trigger if the trigger exists, The IF EXISTS clause is optional.
+
+If you drop a trigger that does not exist without using the 1F EXISTS clause, MySQL issues an error. However. if you use the IF EXISTS clause, MySQL issues a NOTE instead,
+
+The DROP TRIGGER requires the TRIGGER privilege for the table associated with the trigger.
+
+Note that if you drop a table, MySQL will automatically drop all triggers associated with the table.
+
+### SQL Stored Procedure
+A stored procedure is a set of Structured Query Language (SQL) statements with an assigned name, which is stored in a relational database managgement system (RDBMS) as a group, so it can be reused and shared by multiple programs.
+
+Stored procedures can access or modify data in a database, but it is not tied to a specific database or object, which offers a number of advantages.
+Stored procedures provide some crucial benefits, which are: 
+* Reusable: As mentioned, multiple users and applications can easily use and reuse stored procedures by merely calling it.
+* Easy to modify: You can quickly change the statenents in a stored procedure as and when you want to, with the help of the ALTER TABLE command.
+* Security: Stored procedures allow you to enhance the security of an application or a datasbase by restricting the users from direct access to the table.
+* Low neswork traffic: The server-only passes the procedure name instead of the whole query, reducing network traffic.
+* Inereases performance: Upon the first use, a plan for the stored procedure is created and stored in the buffer pool for quick execution for the next time.
+
+### Create a Stored Procedure
+Creating a stored procedure in SQL is ax easy as it sounds. We use CREATE PROCEDURE to create a stored procedure.
+
+Syntax
+```
+CREATE PROCEDURE procedure_name
+AS
+sql_statement
+GO: 
+```
