@@ -3361,3 +3361,89 @@ Key points to remember:
 2. **GIL**: Limits true parallel execution of threads in CPU-bound tasks.
 3. **Threading Module**: Provides a high-level interface for thread management.
 4. **Synchronization Primitives**: `Lock`, `RLock`, `Condition`, `Semaphore`, and thread-local data for coordinating thread execution.
+
+## Some questions in Python (Interview Worthy)
+
+**Q: What is the differnece between append and extend in python?**
+
+In Python, both `append()` and `extend()` are methods used to add elements to a list, but they do so in different ways. Understanding the difference between these two methods is crucial for effective list manipulation.
+
+###### `append()`
+
+The `append()` method adds its argument as a single element to the end of the list. The argument can be any object, including another list. This method modifies the original list in place.
+
+###### Example:
+
+```python
+my_list = [1, 2, 3]
+my_list.append(4)
+print(my_list)  # Output: [1, 2, 3, 4]
+
+my_list.append([5, 6])
+print(my_list)  # Output: [1, 2, 3, 4, [5, 6]]
+```
+
+In this example, `4` is added as a single element, and `[5, 6]` is added as a single list element.
+
+###### `extend()`
+
+The `extend()` method iterates over its argument, adding each element to the list, extending the list. The argument must be an iterable (like a list, tuple, set, or string). This method also modifies the original list in place.
+
+###### Example:
+
+```python
+my_list = [1, 2, 3]
+my_list.extend([4, 5, 6])
+print(my_list)  # Output: [1, 2, 3, 4, 5, 6]
+
+my_list.extend("abc")
+print(my_list)  # Output: [1, 2, 3, 4, 5, 6, 'a', 'b', 'c']
+```
+
+In this example, each element of `[4, 5, 6]` and `"abc"` is added individually to the list.
+
+###### Key Differences
+
+1. **Argument Type**:
+   - `append()`: Takes a single element (can be any object, including a list).
+   - `extend()`: Takes an iterable (list, tuple, string, etc.).
+
+2. **Modification**:
+   - `append()`: Adds the argument as a single element at the end of the list.
+   - `extend()`: Iterates over its argument and adds each element to the list.
+
+3. **Resulting List**:
+   - `append()`: The length of the list increases by 1, regardless of the argument's content.
+   - `extend()`: The length of the list increases by the number of elements in the iterable.
+
+###### When to Use Which
+
+- Use `append()` when you want to add a single element to the list.
+- Use `extend()` when you want to add multiple elements to the list and you have them in an iterable form.
+
+###### Examples to Illustrate the Difference
+
+###### Using `append()`:
+
+```python
+numbers = [1, 2, 3]
+numbers.append(4)
+print(numbers)  # Output: [1, 2, 3, 4]
+
+numbers.append([5, 6])
+print(numbers)  # Output: [1, 2, 3, 4, [5, 6]]
+```
+
+###### Using `extend()`:
+
+```python
+numbers = [1, 2, 3]
+numbers.extend([4, 5, 6])
+print(numbers)  # Output: [1, 2, 3, 4, 5, 6]
+
+numbers.extend('abc')
+print(numbers)  # Output: [1, 2, 3, 4, 5, 6, 'a', 'b', 'c']
+```
+
+
+
