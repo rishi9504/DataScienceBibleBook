@@ -227,3 +227,100 @@ print(added)  # Output: 0    5
               #         1    7
               #         2    9
 ```
+Columns selection deletion and addition
+Assigning new columns in method chains
+Indexing / selection in DataFrame
+Data alignment and arithmetic
+Transposing
+DataFrame interoperability with NumPy functions
+Console display
+Head and tail
+Attributes and underlying data
+Accelerated operations
+Flexible binary operations
+  Matching / broadcasting behavior
+  Missing data / operations with fill values
+  Flexible comparisons
+  Boolean reductions
+  Comparing if objects are equivalent
+  Comparing array-like objects
+  Combining overlapping data sets
+  General DataFrame combine
+  
+Descriptive statistics
+  Summarizing data: describe
+  Index of min/max values
+  Value counts (histogramming) / mode
+  Discretization and quantiling
+Function application
+  Tablewise function application
+  Row or column-wise function application
+  Aggregation API
+    Aggregating with multiple functions
+    Aggregating with a dict
+    Custom describe
+  Transform API
+    Transform with multiple functions
+    Transforming with a dict
+  Applying elementwise functions
+Reindexing and altering labels
+    Reindexing to align with another object
+    Aligning objects with each other with align
+    Filling while reindexing
+    Limits on filling while reindexing
+    Dropping labels from an axis
+    Renaming / mapping labels
+Iteration  
+  items
+  iterrows
+  itertuples
+.dt accessor
+Vectorized string methods
+Sorting
+  By index
+  By values
+  By indexes and values
+  searchsorted
+  smallest / largest values
+  Sorting by a MultiIndex column
+Copying
+dtypes
+  defaults
+  upcasting
+  astype
+  object conversion
+Selecting columns based on dtype
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
