@@ -3470,43 +3470,2000 @@ Output:
 These methods provide powerful ways to get a sense of the distribution, spread, and characteristics of your data quickly.
 
 ### Function application
-#### Tablewise function application
-#### Row or column-wise function application
+In Pandas, applying functions to `DataFrame` or `Series` objects allows for flexible manipulation of data. There are several ways to apply functions, whether they are custom user-defined functions (UDFs) or built-in functions. Pandas provides different methods for function application, such as `apply()`, `applymap()`, and `map()`.
+
+### **Methods of Function Application in Pandas**
+
+1. **`apply()`**: Applies a function along an axis (rows or columns) of a `DataFrame` or `Series`.
+2. **`applymap()`**: Applies a function element-wise to the entire `DataFrame`.
+3. **`map()`**: Applies a function element-wise to a `Series`.
+
+---
+
+### 1. **`apply()`**
+
+The `apply()` function is one of the most versatile in Pandas. It allows you to apply a custom or built-in function along an axis (rows or columns) in both `DataFrame` and `Series`.
+
+#### **For Series**
+
+You can use `apply()` to apply a function to each element of a Series.
+
+```python
+import pandas as pd
+
+# Sample Series
+s = pd.Series([1, 2, 3, 4, 5])
+
+# Apply a lambda function to square each element
+squared = s.apply(lambda x: x ** 2)
+print(squared)
+```
+
+Output:
+```
+0     1
+1     4
+2     9
+3    16
+4    25
+dtype: int64
+```
+
+#### **For DataFrame**
+
+In a `DataFrame`, `apply()` allows you to apply a function either along rows (axis=1) or along columns (axis=0).
+
+- **Applying a function to each column** (axis=0 is the default):
+
+```python
+# Sample DataFrame
+df = pd.DataFrame({
+    'A': [1, 2, 3, 4],
+    'B': [10, 20, 30, 40]
+})
+
+# Apply a function to calculate the sum of each column
+column_sum = df.apply(sum)
+print(column_sum)
+```
+
+Output:
+```
+A     10
+B    100
+dtype: int64
+```
+
+- **Applying a function to each row** (axis=1):
+
+```python
+# Apply a function to calculate the sum of each row
+row_sum = df.apply(lambda row: row['A'] + row['B'], axis=1)
+print(row_sum)
+```
+
+Output:
+```
+0    11
+1    22
+2    33
+3    44
+dtype: int64
+```
+
+#### **Applying Custom Functions**
+
+You can define your own custom functions and use them with `apply()`.
+
+```python
+# Define a custom function that adds 5 to a number
+def add_five(x):
+    return x + 5
+
+# Apply the custom function to each column
+df_applied = df.apply(add_five)
+print(df_applied)
+```
+
+Output:
+```
+   A   B
+0  6  15
+1  7  25
+2  8  35
+3  9  45
+```
+
+### 2. **`applymap()`**
+
+`applymap()` is used to apply a function element-wise to an entire `DataFrame`. Unlike `apply()`, which operates on rows or columns, `applymap()` works on each individual element.
+
+```python
+# Apply a lambda function to square each element in the DataFrame
+df_squared = df.applymap(lambda x: x ** 2)
+print(df_squared)
+```
+
+Output:
+```
+    A    B
+0   1  100
+1   4  400
+2   9  900
+3  16 1600
+```
+
+- **Explanation**: `applymap()` applies the given function (`lambda x: x ** 2`) to each individual element in the `DataFrame`, squaring each value.
+
+### 3. **`map()`**
+
+`map()` is used to apply a function element-wise to a `Series`. It can also be used to map values according to a dictionary, a Series, or a function.
+
+#### **Applying a Function to a Series**
+
+```python
+# Apply a lambda function to double each element in the Series
+s_mapped = s.map(lambda x: x * 2)
+print(s_mapped)
+```
+
+Output:
+```
+0     2
+1     4
+2     6
+3     8
+4    10
+dtype: int64
+```
+
+#### **Mapping Using a Dictionary**
+
+You can also use `map()` to map values in a `Series` to new values according to a dictionary.
+
+```python
+# Mapping old values to new values using a dictionary
+s_mapped_dict = s.map({1: 10, 2: 20, 3: 30})
+print(s_mapped_dict)
+```
+
+Output:
+```
+0    10.0
+1    20.0
+2    30.0
+3     NaN
+4     NaN
+dtype: float64
+```
+
+- **Explanation**: The values `1`, `2`, and `3` in the original `Series` are mapped to `10`, `20`, and `30`, respectively. Since `4` and `5` are not in the dictionary, they are mapped to `NaN`.
+
+---
+
+### **Function Application in Practice**
+
+#### **Example: Applying a Conditional Function**
+
+You can apply more complex custom functions based on conditions.
+
+```python
+# Define a custom function to label values
+def categorize(x):
+    if x < 20:
+        return 'Low'
+    elif x < 40:
+        return 'Medium'
+    else:
+        return 'High'
+
+# Apply the custom function to a column in the DataFrame
+df['Category'] = df['B'].apply(categorize)
+print(df)
+```
+
+Output:
+```
+   A   B Category
+0  1  10      Low
+1  2  20   Medium
+2  3  30   Medium
+3  4  40     High
+```
+
+#### **Example: Normalizing Data Across Columns**
+
+```python
+# Apply normalization to each column in the DataFrame
+df_normalized = df[['A', 'B']].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
+print(df_normalized)
+```
+
+Output:
+```
+     A    B
+0  0.00  0.00
+1  0.33  0.33
+2  0.67  0.67
+3  1.00  1.00
+```
+
+- **Explanation**: This normalizes the values in columns `A` and `B` using the min-max scaling formula.
+
+---
+
+
+| Method     | Description                                      | Input              | Applies To    |
+|------------|--------------------------------------------------|--------------------|---------------|
+| `apply()`  | Apply function along rows (axis=1) or columns (axis=0) | Function           | DataFrame, Series |
+| `applymap()` | Apply function element-wise to the entire DataFrame | Function           | DataFrame     |
+| `map()`    | Map values in a Series using a function, dictionary, or Series | Function, Dictionary | Series        |
+
+These function application methods allow you to flexibly manipulate and transform your data for various tasks such as normalization, conditional operations, and element-wise transformations.
 #### Aggregation API
-##### Aggregating with multiple functions
-##### Aggregating with a dict
-##### Custom describe
+In Pandas, aggregation refers to the process of performing some calculation or summary statistic on data. Pandas provides an **Aggregation API** to facilitate operations like summing, counting, or averaging over data grouped by certain criteria. Aggregation can be performed on both `DataFrame` and `Series` using various methods like `groupby()`, `agg()`, or applying functions directly.
+
+### **Common Aggregation Functions**
+Some of the common functions used for aggregation include:
+- **`sum()`**: Sum of values.
+- **`mean()`**: Average of values.
+- **`count()`**: Count of non-null values.
+- **`min()`**: Minimum value.
+- **`max()`**: Maximum value.
+- **`std()`**: Standard deviation.
+- **`var()`**: Variance.
+- **`median()`**: Median value.
+- **`prod()`**: Product of values.
+
+### **1. Aggregation with `groupby()`**
+The `groupby()` function is one of the most common ways to perform aggregation. It groups data based on one or more columns and allows you to apply aggregation functions on the groups.
+
+#### **Basic Example**
+
+```python
+import pandas as pd
+
+# Sample DataFrame
+data = {
+    'Category': ['A', 'B', 'A', 'B', 'A', 'B'],
+    'Values': [10, 20, 30, 40, 50, 60]
+}
+
+df = pd.DataFrame(data)
+
+# Group by 'Category' and sum the 'Values'
+grouped_sum = df.groupby('Category')['Values'].sum()
+print(grouped_sum)
+```
+
+Output:
+```
+Category
+A     90
+B    120
+Name: Values, dtype: int64
+```
+
+- **Explanation**: The data is grouped by the `Category` column, and the sum of the `Values` for each group is calculated.
+
+#### **Multiple Aggregations**
+
+You can apply multiple aggregation functions using `agg()`.
+
+```python
+# Apply multiple aggregation functions to the 'Values' column
+grouped_agg = df.groupby('Category')['Values'].agg(['sum', 'mean', 'count'])
+print(grouped_agg)
+```
+
+Output:
+```
+           sum  mean  count
+Category                     
+A           90  30.0      3
+B          120  40.0      3
+```
+
+- **Explanation**: Here, the sum, mean, and count are calculated for each group in the `Category` column.
+
+#### **Applying Different Aggregations to Different Columns**
+
+You can apply different aggregation functions to different columns by passing a dictionary to `agg()`.
+
+```python
+# Sample DataFrame with multiple columns
+data = {
+    'Category': ['A', 'B', 'A', 'B', 'A', 'B'],
+    'Values': [10, 20, 30, 40, 50, 60],
+    'Scores': [100, 200, 300, 400, 500, 600]
+}
+
+df = pd.DataFrame(data)
+
+# Apply different aggregations to 'Values' and 'Scores'
+grouped_multi_agg = df.groupby('Category').agg({
+    'Values': 'sum',
+    'Scores': ['mean', 'max']
+})
+print(grouped_multi_agg)
+```
+
+Output:
+```
+           Values Scores      
+              sum  mean  max
+Category                      
+A              90   300  500
+B             120   400  600
+```
+
+- **Explanation**: The sum is calculated for the `Values` column, while the mean and max are calculated for the `Scores` column.
+
+### **2. Aggregation with `agg()` (Aggregation API)**
+
+Pandas provides the `agg()` method that allows you to apply one or more functions on DataFrames or Series, regardless of whether you use `groupby()` or not.
+
+#### **Applying Aggregations on Entire DataFrame**
+
+You can use `agg()` directly on a `DataFrame` without using `groupby()` to apply aggregation functions across the entire DataFrame.
+
+```python
+# Apply multiple aggregation functions on the DataFrame
+df_agg = df.agg({
+    'Values': ['sum', 'mean'],
+    'Scores': ['max', 'min']
+})
+print(df_agg)
+```
+
+Output:
+```
+       Values  Scores
+sum      210.0     NaN
+mean      35.0     NaN
+max        NaN   600.0
+min        NaN   100.0
+```
+
+- **Explanation**: Aggregations like sum and mean are applied to the `Values` column, and max and min are applied to the `Scores` column.
+
+### **3. `transform()` vs `agg()`**
+
+- **`agg()`**: Returns a reduced version of the data (aggregated result).
+- **`transform()`**: Returns a new DataFrame or Series with the same shape as the original, where the function is applied to each group.
+
+#### **`transform()` Example**
+
+```python
+# Transform the data using the mean of each group
+df['Transformed'] = df.groupby('Category')['Values'].transform('mean')
+print(df)
+```
+
+Output:
+```
+  Category  Values  Scores  Transformed
+0        A      10     100         30.0
+1        B      20     200         40.0
+2        A      30     300         30.0
+3        B      40     400         40.0
+4        A      50     500         30.0
+5        B      60     600         40.0
+```
+
+- **Explanation**: The `transform()` function applies the mean for each group in the `Category` column, and the result is added back to the original `DataFrame` with the same shape.
+
+### **4. Aggregation with `pivot_table()`**
+
+The `pivot_table()` function allows you to summarize data with aggregation in a more structured format, similar to Excel pivot tables.
+
+```python
+# Create a pivot table
+pivot = df.pivot_table(values='Values', index='Category', aggfunc=['sum', 'mean'])
+print(pivot)
+```
+
+Output:
+```
+           sum  mean
+Category             
+A           90  30.0
+B          120  40.0
+```
+
+### **5. Custom Aggregation Functions**
+
+You can apply custom functions during aggregation using `agg()`.
+
+```python
+# Define a custom function
+def range_func(x):
+    return x.max() - x.min()
+
+# Apply the custom function using agg()
+custom_agg = df.groupby('Category')['Values'].agg(range_func)
+print(custom_agg)
+```
+
+Output:
+```
+Category
+A    40
+B    40
+Name: Values, dtype: int64
+```
+
+- **Explanation**: The custom function calculates the range (max - min) for the `Values` column in each group.
+
+---
+
+### **Key Aggregation Methods in Pandas**
+
+| Method             | Description                                             |
+|--------------------|---------------------------------------------------------|
+| `groupby()`        | Groups data based on one or more keys and applies aggregation. |
+| `agg()`            | Applies one or more aggregation functions to `DataFrame` or `Series`. |
+| `transform()`      | Applies a function element-wise to groups but keeps the original shape. |
+| `pivot_table()`    | Creates a pivot table, summarizing data with aggregation. |
+| `apply()`          | Applies a function along rows or columns (can also aggregate). |
+
+Aggregation in Pandas is very powerful for data summarization and transformation. It’s especially useful for data analysis, enabling you to gain insights into your data quickly.
+
+
+
 #### Transform API
-##### Transform with multiple functions
-##### Transforming with a dict
-#### Applying elementwise functions
+The **`transform()` API** in Pandas is a powerful tool that allows you to perform element-wise transformations of a `Series` or `DataFrame`, while retaining the same shape as the original data. It is typically used with `groupby()` to apply functions to individual groups in a dataset, and the result is "broadcasted" back to the original structure.
+
+Unlike `agg()` (which returns a reduced version of the data), `transform()` keeps the shape of the original `DataFrame` or `Series`, making it useful for creating new columns or performing operations that should align with the original data.
+
+### **Key Features of `transform()`**
+- **Same shape**: The transformed data has the same shape as the original.
+- **Element-wise transformation**: It applies the function to each group independently and broadcasts the result to match the index of the original data.
+- **Customizable functions**: You can use both built-in or custom functions.
+
+### **Syntax**
+
+```python
+DataFrame.transform(func, axis=0, *args, **kwargs)
+```
+
+- **`func`**: The function to apply to the data.
+- **`axis`**: Whether to apply the function along rows (axis=0) or columns (axis=1).
+- **`*args` and `**kwargs`**: Additional arguments passed to the function.
+
+---
+
+### **Using `transform()` with GroupBy**
+
+`transform()` is commonly used in conjunction with `groupby()` to perform transformations on groups of data. Here’s a simple example:
+
+#### **Example: Mean of Each Group**
+
+```python
+import pandas as pd
+
+# Sample DataFrame
+df = pd.DataFrame({
+    'Category': ['A', 'B', 'A', 'B', 'A', 'B'],
+    'Values': [10, 20, 30, 40, 50, 60]
+})
+
+# Apply transform to calculate the mean of each group
+df['Mean'] = df.groupby('Category')['Values'].transform('mean')
+print(df)
+```
+
+Output:
+```
+  Category  Values  Mean
+0        A      10  30.0
+1        B      20  40.0
+2        A      30  30.0
+3        B      40  40.0
+4        A      50  30.0
+5        B      60  40.0
+```
+
+- **Explanation**: `transform('mean')` calculates the mean for each group in the `Category` column, and the result is broadcasted back to each corresponding row.
+
+### **Comparison: `transform()` vs `agg()`**
+
+| Feature          | `transform()`                       | `agg()`                         |
+|------------------|-------------------------------------|---------------------------------|
+| Shape of output  | Same as original `DataFrame`/`Series`| Aggregated/reduced version       |
+| Use cases        | Element-wise operations, aligned with the original data | Summarization, reduced results   |
+| Result           | Transformed values for each group   | One result per group            |
+
+### **Common Use Cases**
+
+#### 1. **Standardizing Data (Z-Score)**
+
+```python
+# Calculate the Z-score for each value in its respective group
+df['Z-Score'] = df.groupby('Category')['Values'].transform(lambda x: (x - x.mean()) / x.std())
+print(df)
+```
+
+Output:
+```
+  Category  Values  Z-Score
+0        A      10 -0.92582
+1        B      20 -1.00000
+2        A      30  0.00000
+3        B      40  0.00000
+4        A      50  0.92582
+5        B      60  1.00000
+```
+
+- **Explanation**: The Z-score standardizes the data within each group by subtracting the mean and dividing by the standard deviation.
+
+#### 2. **Filling Missing Values by Group**
+
+```python
+# Create a DataFrame with missing values
+df_nan = pd.DataFrame({
+    'Category': ['A', 'B', 'A', 'B', 'A', 'B'],
+    'Values': [10, None, 30, None, 50, 60]
+})
+
+# Fill missing values with the mean of each group
+df_nan['Filled'] = df_nan.groupby('Category')['Values'].transform(lambda x: x.fillna(x.mean()))
+print(df_nan)
+```
+
+Output:
+```
+  Category  Values  Filled
+0        A     10.0    10.0
+1        B      NaN    60.0
+2        A     30.0    30.0
+3        B      NaN    60.0
+4        A     50.0    50.0
+5        B     60.0    60.0
+```
+
+- **Explanation**: Missing values in the `Values` column are filled with the mean of the respective groups.
+
+#### 3. **Ranking Within Groups**
+
+You can use `transform()` to rank values within each group.
+
+```python
+# Rank the values within each group
+df['Rank'] = df.groupby('Category')['Values'].transform('rank')
+print(df)
+```
+
+Output:
+```
+  Category  Values  Rank
+0        A      10   1.0
+1        B      20   1.0
+2        A      30   2.0
+3        B      40   2.0
+4        A      50   3.0
+5        B      60   3.0
+```
+
+- **Explanation**: The `Values` column is ranked within each group of the `Category` column.
+
+### **Applying Custom Functions**
+
+You can define your own custom functions and use them with `transform()`.
+
+#### Example: Custom Transformation Function
+
+```python
+# Define a custom function to multiply by 2
+def custom_function(x):
+    return x * 2
+
+# Apply the custom function to the 'Values' column
+df['Transformed'] = df.groupby('Category')['Values'].transform(custom_function)
+print(df)
+```
+
+Output:
+```
+  Category  Values  Transformed
+0        A      10          20
+1        B      20          40
+2        A      30          60
+3        B      40          80
+4        A      50         100
+5        B      60         120
+```
+
+- **Explanation**: Each value in the `Values` column is multiplied by 2 within its group.
+
+---
+
+### **Summary of `transform()` Key Concepts**
+
+- **Retains Shape**: Unlike aggregation, `transform()` does not reduce the data size; it applies the transformation element-wise.
+- **Used with `groupby()`**: Frequently used with `groupby()` to apply transformations across groups.
+- **Broadcasting**: Results are broadcasted to align with the original data structure, making it useful for adding new columns.
+- **Custom Functions**: Can be used with both built-in functions (`mean`, `rank`, etc.) and custom-defined functions.
+
+### **Typical Use Cases for `transform()`**
+
+- **Standardization**: Standardizing data within groups (e.g., Z-score normalization).
+- **Missing Value Handling**: Filling missing values within groups.
+- **Ranking**: Ranking elements within groups.
+- **Smoothing/Transforming Data**: Applying custom smoothing or transformation functions while maintaining the original shape.
+
+The `transform()` method is especially helpful when you need to compute group-wise operations without losing the original structure of the data, making it perfect for tasks like feature engineering in machine learning workflows.
+
+
 ### Reindexing and altering labels
-##### Reindexing to align with another object
-##### Aligning objects with each other with align
-##### Filling while reindexing
-##### Limits on filling while reindexing
-##### Dropping labels from an axis
-##### Renaming / mapping labels
+Reindexing and altering labels in Pandas allows you to change the row and column labels (indexes) of a `DataFrame` or `Series`. This is a powerful feature when you need to modify the structure of your data, align it with another dataset, or rename the row/column labels for clarity.
+
+### **1. Reindexing**
+Reindexing allows you to change the labels (indices) of the rows and columns. If the new labels don’t match the existing ones, missing values (`NaN`) will be introduced.
+
+#### **Reindexing a `Series`**
+
+```python
+import pandas as pd
+
+# Create a Series
+s = pd.Series([1, 2, 3], index=['a', 'b', 'c'])
+
+# Reindex the Series
+s_reindexed = s.reindex(['a', 'b', 'd', 'e'])
+print(s_reindexed)
+```
+
+Output:
+```
+a    1.0
+b    2.0
+d    NaN
+e    NaN
+dtype: float64
+```
+
+- **Explanation**: The Series is reindexed to a new list `['a', 'b', 'd', 'e']`. Since `'d'` and `'e'` were not in the original index, missing values (`NaN`) are introduced.
+
+#### **Reindexing a `DataFrame`**
+
+```python
+# Create a DataFrame
+df = pd.DataFrame({
+    'A': [1, 2, 3],
+    'B': [4, 5, 6]
+}, index=['a', 'b', 'c'])
+
+# Reindex the DataFrame
+df_reindexed = df.reindex(['a', 'b', 'd'])
+print(df_reindexed)
+```
+
+Output:
+```
+     A    B
+a  1.0  4.0
+b  2.0  5.0
+d  NaN  NaN
+```
+
+- **Explanation**: The DataFrame is reindexed, and missing values are introduced for the new index `'d'`.
+
+### **Reindexing with `fill_value`**
+You can fill missing values introduced by reindexing with a specific value using the `fill_value` parameter.
+
+```python
+# Reindex and fill missing values with 0
+df_filled = df.reindex(['a', 'b', 'd'], fill_value=0)
+print(df_filled)
+```
+
+Output:
+```
+     A  B
+a  1.0  4
+b  2.0  5
+d  0.0  0
+```
+
+- **Explanation**: Missing values introduced by reindexing are filled with `0`.
+
+### **Reindexing Columns**
+You can reindex columns just like rows.
+
+```python
+# Reindex columns
+df_columns_reindexed = df.reindex(columns=['A', 'C'])
+print(df_columns_reindexed)
+```
+
+Output:
+```
+     A   C
+a  1.0 NaN
+b  2.0 NaN
+c  3.0 NaN
+```
+
+- **Explanation**: The `C` column did not exist in the original DataFrame, so `NaN` values are introduced.
+
+### **Reindexing with `method` (Forward or Backward Fill)**
+You can use the `method` parameter to fill missing values with forward-fill (`ffill`) or backward-fill (`bfill`).
+
+```python
+# Reindex and forward-fill missing values
+df_ffill = df.reindex(['a', 'b', 'd'], method='ffill')
+print(df_ffill)
+```
+
+Output:
+```
+     A  B
+a  1.0  4
+b  2.0  5
+d  2.0  5
+```
+
+- **Explanation**: The missing row for `'d'` is filled using the forward-fill method, which propagates the previous value.
+
+---
+
+### **2. Altering Labels**
+
+Pandas provides various methods to rename or alter the row and column labels of a `DataFrame` or `Series`.
+
+#### **Renaming Labels with `rename()`**
+The `rename()` function allows you to alter row and column labels in a flexible way.
+
+```python
+# Rename the row labels
+df_renamed = df.rename(index={'a': 'alpha', 'b': 'beta'})
+print(df_renamed)
+```
+
+Output:
+```
+       A  B
+alpha  1  4
+beta   2  5
+c      3  6
+```
+
+- **Explanation**: The row labels `'a'` and `'b'` are renamed to `'alpha'` and `'beta'`.
+
+#### **Renaming Columns**
+
+```python
+# Rename the columns
+df_columns_renamed = df.rename(columns={'A': 'Column1', 'B': 'Column2'})
+print(df_columns_renamed)
+```
+
+Output:
+```
+   Column1  Column2
+a        1        4
+b        2        5
+c        3        6
+```
+
+- **Explanation**: The columns `'A'` and `'B'` are renamed to `'Column1'` and `'Column2'`.
+
+#### **Renaming Using a Function**
+You can also pass a function to `rename()` to apply transformations to the labels.
+
+```python
+# Rename the row labels using a function
+df_func_renamed = df.rename(index=str.upper)
+print(df_func_renamed)
+```
+
+Output:
+```
+   A  B
+A  1  4
+B  2  5
+C  3  6
+```
+
+- **Explanation**: The row labels are converted to uppercase using the `str.upper` function.
+
+---
+
+### **3. Resetting Index**
+The `reset_index()` method is used to reset the index of the `DataFrame` back to the default integer index. This is useful when you want to discard the current index and convert it into a column.
+
+```python
+# Reset the index
+df_reset = df.reset_index()
+print(df_reset)
+```
+
+Output:
+```
+  index  A  B
+0     a  1  4
+1     b  2  5
+2     c  3  6
+```
+
+- **Explanation**: The current index is turned into a column, and the default integer index is restored.
+
+#### **Dropping the Old Index**
+You can use the `drop=True` option in `reset_index()` if you don’t want to retain the old index as a column.
+
+```python
+# Reset index and drop the old index
+df_reset_dropped = df.reset_index(drop=True)
+print(df_reset_dropped)
+```
+
+Output:
+```
+   A  B
+0  1  4
+1  2  5
+2  3  6
+```
+
+- **Explanation**: The old index is discarded, and the DataFrame is reindexed from `0`.
+
+---
+
+### **4. Setting Index**
+The `set_index()` method allows you to set a column (or multiple columns) as the index of the `DataFrame`.
+
+```python
+# Set the 'A' column as the index
+df_set_index = df.set_index('A')
+print(df_set_index)
+```
+
+Output:
+```
+   B
+A   
+1  4
+2  5
+3  6
+```
+
+- **Explanation**: The `A` column is set as the index.
+
+### **Setting Multiple Indexes**
+
+```python
+# Create a DataFrame with multiple columns
+df_multi = pd.DataFrame({
+    'City': ['New York', 'Los Angeles', 'Chicago'],
+    'Year': [2020, 2021, 2020],
+    'Population': [8.3, 3.9, 2.7]
+})
+
+# Set multiple columns as index
+df_multi_index = df_multi.set_index(['City', 'Year'])
+print(df_multi_index)
+```
+
+Output:
+```
+                    Population
+City        Year              
+New York    2020          8.3
+Los Angeles 2021          3.9
+Chicago     2020          2.7
+```
+
+- **Explanation**: Both `City` and `Year` columns are used as a hierarchical index.
+
+---
+
+
+- **Reindexing**: Change row and column labels. Missing labels introduce `NaN`. You can fill missing values or use methods like `ffill`.
+- **Altering Labels**: Use `rename()` to rename row and column labels. You can rename directly with a dictionary or apply functions.
+- **Resetting Index**: Restore the default integer index and optionally keep or drop the old index.
+- **Setting Index**: Set one or more columns as the index, which is useful for organizing data.
+
+Reindexing and altering labels are essential for data cleaning and preparation in Pandas, enabling you to reshape your data structure to suit analysis requirements.
+
+
 ### Iteration  
-#### items
-#### iterrows
-#### itertuples
+Iteration in pandas allows you to loop through the rows or columns of a `DataFrame` or `Series`. However, unlike traditional Python objects, Pandas is optimized for vectorized operations, which are much faster than explicit iteration. Therefore, iterating over DataFrames or Series is generally not recommended for large datasets. When necessary, though, Pandas provides a number of methods to iterate over rows and columns.
+
+Here are the most commonly used methods for iteration in Pandas:
+
+### **1. Iterating over Rows**
+
+#### **Using `iterrows()`**
+- **`iterrows()`** generates an iterator that returns each row as a tuple of the index and the row as a `Series`. 
+- The index represents the row label, and the `Series` contains the values in that row.
+
+```python
+import pandas as pd
+
+# Create a DataFrame
+df = pd.DataFrame({
+    'Name': ['Alice', 'Bob', 'Charlie'],
+    'Age': [25, 30, 35],
+    'City': ['New York', 'Los Angeles', 'Chicago']
+})
+
+# Iterate over rows
+for index, row in df.iterrows():
+    print(f"Index: {index}")
+    print(f"Name: {row['Name']}, Age: {row['Age']}, City: {row['City']}")
+```
+
+Output:
+```
+Index: 0
+Name: Alice, Age: 25, City: New York
+Index: 1
+Name: Bob, Age: 30, City: Los Angeles
+Index: 2
+Name: Charlie, Age: 35, City: Chicago
+```
+
+- **Pros**: Easy to use, readable.
+- **Cons**: `iterrows()` is slow, especially for large DataFrames, as it returns a copy of each row, not a reference.
+
+#### **Using `itertuples()`**
+- **`itertuples()`** is faster than `iterrows()` because it returns rows as namedtuples, which are more efficient and allow for attribute-style access (`row.Name` instead of `row['Name']`).
+
+```python
+# Iterate using itertuples
+for row in df.itertuples():
+    print(f"Index: {row.Index}, Name: {row.Name}, Age: {row.Age}, City: {row.City}")
+```
+
+Output:
+```
+Index: 0, Name: Alice, Age: 25, City: New York
+Index: 1, Name: Bob, Age: 30, City: Los Angeles
+Index: 2, Name: Charlie, Age: 35, City: Chicago
+```
+
+- **Pros**: Faster than `iterrows()`, attributes are easily accessible.
+- **Cons**: Doesn’t handle non-string column names well (e.g., column names with spaces).
+
+#### **Using `apply()`**
+- **`apply()`** allows you to apply a function along the axis of a DataFrame (rows or columns). This is a vectorized approach and much faster than explicit iteration.
+
+```python
+# Define a function to process rows
+def process_row(row):
+    return f"{row['Name']} is {row['Age']} years old and lives in {row['City']}."
+
+# Apply the function to each row
+df['Description'] = df.apply(process_row, axis=1)
+print(df)
+```
+
+Output:
+```
+      Name  Age         City                           Description
+0    Alice   25     New York    Alice is 25 years old and lives in New York.
+1      Bob   30  Los Angeles  Bob is 30 years old and lives in Los Angeles.
+2  Charlie   35      Chicago   Charlie is 35 years old and lives in Chicago.
+```
+
+- **Pros**: Fast, vectorized, suitable for more complex row-wise operations.
+- **Cons**: May not be intuitive for simple iteration tasks.
+
+### **2. Iterating over Columns**
+
+You can iterate over columns in a `DataFrame` in several ways:
+
+#### **Using `iteritems()`**
+- **`iteritems()`** generates an iterator that yields column names and the corresponding data as a `Series`.
+
+```python
+# Iterate over columns
+for col_name, col_data in df.iteritems():
+    print(f"Column: {col_name}")
+    print(col_data)
+```
+
+Output:
+```
+Column: Name
+0      Alice
+1        Bob
+2    Charlie
+Name: Name, dtype: object
+Column: Age
+0    25
+1    30
+2    35
+Name: Age, dtype: int64
+Column: City
+0       New York
+1    Los Angeles
+2       Chicago
+Name: City, dtype: object
+```
+
+- **Pros**: Simple, easy to understand.
+- **Cons**: Iterating over columns is not very common, as most operations can be done with vectorized methods.
+
+#### **Using `apply()` on Columns**
+You can use the `apply()` function to apply a function to each column.
+
+```python
+# Apply a function to each column
+df_col_sum = df[['Age']].apply(sum)
+print(df_col_sum)
+```
+
+Output:
+```
+Age    90
+dtype: int64
+```
+
+- **Pros**: Vectorized, fast.
+- **Cons**: More suitable for applying transformations rather than simple iteration.
+
+### **3. Iterating Over Cells**
+
+If you need to iterate over individual cells, you can use `iterrows()` or `itertuples()` along with column access, but it’s generally better to avoid this for performance reasons.
+
+#### **Using Nested Loops**
+You can combine the `iterrows()` or `itertuples()` methods with a loop over column names to access each individual cell.
+
+```python
+# Iterate over rows and columns
+for index, row in df.iterrows():
+    for col in df.columns:
+        print(f"Row {index}, Column {col}: {row[col]}")
+```
+
+- **Pros**: Flexible, easy to implement.
+- **Cons**: Very slow for large DataFrames.
+
+### **4. Vectorized Operations (Preferred Over Iteration)**
+
+Instead of iterating explicitly, you should use vectorized operations, which are much faster in Pandas. For example, adding a constant to a column:
+
+```python
+# Add 5 to each value in the 'Age' column (vectorized operation)
+df['Age'] = df['Age'] + 5
+print(df)
+```
+
+Output:
+```
+      Name  Age         City
+0    Alice   30     New York
+1      Bob   35  Los Angeles
+2  Charlie   40      Chicago
+```
+
+- **Pros**: Much faster, takes advantage of underlying NumPy optimizations.
+- **Cons**: Less intuitive than simple Python loops for beginners, but critical for performance with large datasets.
+
+### **Summary of Iteration Methods**
+
+| Method         | Iterates Over | Pros                                             | Cons                                           |
+|----------------|---------------|--------------------------------------------------|------------------------------------------------|
+| `iterrows()`   | Rows          | Easy to use, returns index and Series            | Slow, returns a copy of each row               |
+| `itertuples()` | Rows          | Faster, returns namedtuple                       | Non-string column names may cause issues       |
+| `iteritems()`  | Columns       | Simple, returns column name and Series           | Not very common, slow for large DataFrames     |
+| `apply()`      | Rows/Columns  | Vectorized, fast, flexible                       | Takes more time to understand for beginners    |
+| Vectorized Ops | Cells         | Extremely fast, utilizes Pandas/NumPy optimizations | Not always intuitive, requires a different mindset|
+
+
+- **Avoid explicit iteration** unless necessary. Use vectorized operations like `apply()`, which are optimized for performance.
+- **`iterrows()` and `itertuples()`** are common for small datasets or when you need to perform row-wise operations.
+- **`apply()`** is ideal for applying a function across rows or columns in a more efficient manner.
+- **Vectorized operations** should be your go-to approach for performance-critical tasks, especially with large datasets.
+
 ### .dt accessor
+The `.dt` accessor in pandas is a powerful tool for handling date and time data. It allows you to access various properties and methods for `datetime`-like objects in a `Series`. The `.dt` accessor provides convenient access to datetime-related attributes such as day, month, year, weekday, and time-specific properties like hour, minute, and second, as well as methods like `floor()`, `ceil()`, and `strftime()` for formatting datetime values.
+
+The `.dt` accessor can only be used with `Series` or `DataFrame` columns that contain datetime-like values, such as `datetime64`, `timedelta64`, or `Period` dtype.
+
+### **1. Basic Usage of `.dt` Accessor**
+
+#### **Converting to Datetime**
+Before using `.dt`, ensure that your data is in a `datetime` format. You can convert strings to `datetime` using `pd.to_datetime()`.
+
+```python
+import pandas as pd
+
+# Create a DataFrame with date strings
+df = pd.DataFrame({
+    'date': ['2023-01-01', '2023-02-14', '2023-03-31']
+})
+
+# Convert to datetime
+df['date'] = pd.to_datetime(df['date'])
+
+print(df)
+```
+
+Output:
+```
+        date
+0 2023-01-01
+1 2023-02-14
+2 2023-03-31
+```
+
+#### **Accessing Year, Month, Day, etc.**
+Once the column is in datetime format, you can use `.dt` to extract specific parts of the datetime.
+
+```python
+# Extract year, month, and day using .dt
+df['year'] = df['date'].dt.year
+df['month'] = df['date'].dt.month
+df['day'] = df['date'].dt.day
+
+print(df)
+```
+
+Output:
+```
+        date  year  month  day
+0 2023-01-01  2023      1    1
+1 2023-02-14  2023      2   14
+2 2023-03-31  2023      3   31
+```
+
+- **`.dt.year`**: Extracts the year.
+- **`.dt.month`**: Extracts the month.
+- **`.dt.day`**: Extracts the day.
+
+### **2. Extracting Time Components**
+
+If your data contains both date and time information, you can use the `.dt` accessor to extract the time components such as hour, minute, and second.
+
+```python
+# Create a DataFrame with datetime strings including time
+df = pd.DataFrame({
+    'datetime': ['2023-01-01 08:30:00', '2023-02-14 12:45:00', '2023-03-31 18:15:00']
+})
+
+# Convert to datetime
+df['datetime'] = pd.to_datetime(df['datetime'])
+
+# Extract time components
+df['hour'] = df['datetime'].dt.hour
+df['minute'] = df['datetime'].dt.minute
+df['second'] = df['datetime'].dt.second
+
+print(df)
+```
+
+Output:
+```
+             datetime  hour  minute  second
+0 2023-01-01 08:30:00     8      30       0
+1 2023-02-14 12:45:00    12      45       0
+2 2023-03-31 18:15:00    18      15       0
+```
+
+- **`.dt.hour`**: Extracts the hour.
+- **`.dt.minute`**: Extracts the minute.
+- **`.dt.second`**: Extracts the second.
+
+### **3. Accessing Date Properties**
+
+You can also use `.dt` to extract other date-related properties such as day of the week, quarter, and whether a date is the beginning or end of a month, quarter, or year.
+
+```python
+# Extract additional date-related properties
+df['day_of_week'] = df['datetime'].dt.dayofweek   # 0 = Monday, 6 = Sunday
+df['day_name'] = df['datetime'].dt.day_name()     # Returns the name of the day
+df['quarter'] = df['datetime'].dt.quarter         # Extract quarter of the year
+df['is_month_start'] = df['datetime'].dt.is_month_start  # Is the date the start of the month?
+df['is_month_end'] = df['datetime'].dt.is_month_end      # Is the date the end of the month?
+
+print(df)
+```
+
+Output:
+```
+             datetime  day_of_week   day_name  quarter  is_month_start  is_month_end
+0 2023-01-01 08:30:00            6     Sunday        1            True         False
+1 2023-02-14 12:45:00            1    Tuesday        1           False         False
+2 2023-03-31 18:15:00            4    Friday        1           False          True
+```
+
+- **`.dt.dayofweek`**: Returns the day of the week (Monday=0, Sunday=6).
+- **`.dt.day_name()`**: Returns the name of the day (e.g., 'Monday', 'Tuesday').
+- **`.dt.quarter`**: Returns the quarter of the year (1, 2, 3, or 4).
+- **`.dt.is_month_start`**: Returns `True` if the date is the first day of the month.
+- **`.dt.is_month_end`**: Returns `True` if the date is the last day of the month.
+
+### **4. Time Differences (Timedelta)**
+
+When working with durations or differences between datetime values, you can use the `.dt` accessor on `timedelta` objects.
+
+```python
+# Create a DataFrame with time differences
+df = pd.DataFrame({
+    'start': ['2023-01-01 08:00:00', '2023-02-14 09:30:00'],
+    'end': ['2023-01-01 12:00:00', '2023-02-14 11:45:00']
+})
+
+# Convert to datetime
+df['start'] = pd.to_datetime(df['start'])
+df['end'] = pd.to_datetime(df['end'])
+
+# Calculate time difference
+df['duration'] = df['end'] - df['start']
+
+# Extract time difference components
+df['hours'] = df['duration'].dt.total_seconds() / 3600
+df['minutes'] = df['duration'].dt.total_seconds() / 60
+
+print(df)
+```
+
+Output:
+```
+                start                 end     duration     hours    minutes
+0 2023-01-01 08:00:00 2023-01-01 12:00:00  0 days 04:00:00  4.000000   240.0
+1 2023-02-14 09:30:00 2023-02-14 11:45:00  0 days 02:15:00  2.250000   135.0
+```
+
+- **`.dt.total_seconds()`**: Returns the total duration in seconds.
+- **`.dt.days`, `.dt.seconds`, `.dt.microseconds`**: Extract days, seconds, or microseconds from a `Timedelta` object.
+
+### **5. Rounding, Flooring, and Ceiling with `.dt`**
+
+You can use the `.dt` accessor to round, floor, or ceil datetime values to a specific frequency.
+
+```python
+# Create a DataFrame with datetime values
+df = pd.DataFrame({
+    'datetime': pd.to_datetime(['2023-01-01 12:34:56', '2023-02-14 09:10:15'])
+})
+
+# Floor, ceil, and round the datetime values to the nearest hour
+df['floor'] = df['datetime'].dt.floor('H')
+df['ceil'] = df['datetime'].dt.ceil('H')
+df['round'] = df['datetime'].dt.round('H')
+
+print(df)
+```
+
+Output:
+```
+             datetime               floor                ceil               round
+0 2023-01-01 12:34:56 2023-01-01 12:00:00 2023-01-01 13:00:00 2023-01-01 13:00:00
+1 2023-02-14 09:10:15 2023-02-14 09:00:00 2023-02-14 10:00:00 2023-02-14 09:00:00
+```
+
+- **`.dt.floor('H')`**: Rounds down to the nearest hour.
+- **`.dt.ceil('H')`**: Rounds up to the nearest hour.
+- **`.dt.round('H')`**: Rounds to the nearest hour.
+
+### **6. Formatting with `.dt.strftime()`**
+
+You can format datetime values as strings using `.dt.strftime()`, which works similarly to Python's `strftime()` function.
+
+```python
+# Format the datetime values as strings
+df['formatted'] = df['datetime'].dt.strftime('%Y-%m-%d %H:%M:%S')
+
+print(df)
+```
+
+Output:
+```
+             datetime           formatted
+0 2023-01-01 12:34:56  2023-01-01 12:34:56
+```
+
 ### Vectorized string methods
+
+Pandas provides a set of vectorized string methods through the `.str` accessor, allowing for efficient operations on Series or DataFrame columns containing text data. These methods are applied element-wise to the string values in the Series, which makes them much faster than using Python loops for string manipulation.
+
+### **Commonly Used Vectorized String Methods**
+
+Here are some common string operations that can be performed using the `.str` accessor:
+
+### **1. String Case Conversion**
+
+- **`str.lower()`**: Converts all characters in the string to lowercase.
+- **`str.upper()`**: Converts all characters in the string to uppercase.
+- **`str.title()`**: Converts the first character of each word to uppercase and the rest to lowercase.
+- **`str.capitalize()`**: Converts the first character of the string to uppercase and the rest to lowercase.
+
+```python
+import pandas as pd
+
+# Create a Series with text data
+s = pd.Series(['Hello', 'World', 'Python', 'Pandas'])
+
+# Convert to lowercase
+print(s.str.lower())
+
+# Convert to uppercase
+print(s.str.upper())
+
+# Convert to title case
+print(s.str.title())
+
+# Capitalize the first character
+print(s.str.capitalize())
+```
+
+### **2. String Length**
+
+- **`str.len()`**: Returns the length of each string in the Series.
+
+```python
+# Get the length of each string
+print(s.str.len())
+```
+
+### **3. Substring and Slicing**
+
+- **`str.slice()`**: Allows slicing of each string in the Series (similar to Python string slicing).
+- **`str.get()`**: Accesses a single character at a given position.
+
+```python
+# Slice first 3 characters from each string
+print(s.str.slice(0, 3))
+
+# Access the first character of each string
+print(s.str.get(0))
+```
+
+### **4. Checking for Substrings**
+
+- **`str.contains()`**: Checks if a substring is present in each string.
+- **`str.startswith()`**: Checks if each string starts with a specific substring.
+- **`str.endswith()`**: Checks if each string ends with a specific substring.
+
+```python
+# Check if strings contain the substring 'Py'
+print(s.str.contains('Py'))
+
+# Check if strings start with 'P'
+print(s.str.startswith('P'))
+
+# Check if strings end with 'd'
+print(s.str.endswith('d'))
+```
+
+### **5. String Replacement**
+
+- **`str.replace()`**: Replaces occurrences of a substring with another substring.
+
+```python
+# Replace 'Pandas' with 'DataFrame'
+print(s.str.replace('Pandas', 'DataFrame'))
+```
+
+### **6. Removing Leading/Trailing Characters**
+
+- **`str.strip()`**: Removes leading and trailing whitespace (or specific characters).
+- **`str.lstrip()`**: Removes leading characters.
+- **`str.rstrip()`**: Removes trailing characters.
+
+```python
+s_with_spaces = pd.Series(['  Hello  ', '  World  ', '  Pandas  '])
+
+# Strip leading and trailing spaces
+print(s_with_spaces.str.strip())
+
+# Strip only leading spaces
+print(s_with_spaces.str.lstrip())
+
+# Strip only trailing spaces
+print(s_with_spaces.str.rstrip())
+```
+
+### **7. Splitting and Joining Strings**
+
+- **`str.split()`**: Splits each string in the Series by a delimiter.
+- **`str.join()`**: Joins elements of a list or Series into a single string, with a given separator.
+
+```python
+# Split strings by whitespace
+print(s.str.split())
+
+# Split by a specific character (e.g., 'o')
+print(s.str.split('o'))
+
+# Join elements of a Series with a separator
+s_words = pd.Series([['Hello', 'World'], ['Python', 'Pandas']])
+print(s_words.str.join(' '))
+```
+
+### **8. Extracting Substrings with Regular Expressions**
+
+- **`str.extract()`**: Extracts substrings that match a regular expression.
+- **`str.findall()`**: Finds all occurrences of a pattern.
+
+```python
+# Extract numbers from strings
+s_with_nums = pd.Series(['a1', 'b2', 'c3'])
+print(s_with_nums.str.extract('(\d)'))
+
+# Find all lowercase letters
+s_with_multiple_matches = pd.Series(['abc123def', 'ghi456jkl'])
+print(s_with_multiple_matches.str.findall('[a-z]+'))
+```
+
+### **9. String Concatenation**
+
+- **`str.cat()`**: Concatenates strings in a Series with a specified separator.
+
+```python
+# Concatenate strings with a space separator
+s1 = pd.Series(['Hello', 'Goodbye'])
+s2 = pd.Series(['World', 'Everyone'])
+print(s1.str.cat(s2, sep=' '))
+```
+
+### **10. Repeating Strings**
+
+- **`str.repeat()`**: Repeats each string a specified number of times.
+
+```python
+# Repeat each string 2 times
+print(s.str.repeat(2))
+```
+
+### **11. Detecting String Patterns**
+
+- **`str.match()`**: Determines if strings match a given regular expression pattern.
+- **`str.count()`**: Counts occurrences of a pattern in each string.
+
+```python
+# Check if strings match a pattern (e.g., start with an uppercase letter)
+print(s.str.match('^[A-Z]'))
+
+# Count occurrences of a specific character (e.g., 'o')
+print(s.str.count('o'))
+```
+
+### **12. Handling Missing Values**
+
+- **`str.isna()`**: Detects missing values (i.e., NaN).
+- **`str.fillna()`**: Fills missing values with a specified string.
+
+```python
+s_with_nan = pd.Series(['Hello', None, 'Pandas'])
+# Check for missing values
+print(s_with_nan.str.isna())
+
+# Fill missing values
+print(s_with_nan.str.fillna('Missing'))
+```
+
+### **Summary Table of Common String Methods**
+
+| Method              | Description                                            |
+|---------------------|--------------------------------------------------------|
+| `str.lower()`       | Convert strings to lowercase                           |
+| `str.upper()`       | Convert strings to uppercase                           |
+| `str.len()`         | Return length of each string                           |
+| `str.contains()`    | Check if substring is present                          |
+| `str.startswith()`  | Check if strings start with a substring                |
+| `str.endswith()`    | Check if strings end with a substring                  |
+| `str.replace()`     | Replace occurrences of a substring                     |
+| `str.split()`       | Split strings by a delimiter                           |
+| `str.join()`        | Join elements of a list into a string                  |
+| `str.extract()`     | Extract substrings using a regular expression          |
+| `str.cat()`         | Concatenate strings with a separator                   |
+| `str.repeat()`      | Repeat each string a specified number of times         |
+| `str.count()`       | Count occurrences of a substring                       |
+| `str.strip()`       | Remove leading/trailing whitespace (or specific chars) |
+| `str.isna()`        | Detect missing values                                  |
+| `str.fillna()`      | Fill missing values with a specified string            |
+
+These vectorized string methods allow for fast and efficient manipulation of text data in pandas, making it easy to clean, format, and analyze large datasets containing strings.
+
+
 ### Sorting
-#### By index
-#### By values
-#### By indexes and values
-#### searchsorted
-#### smallest / largest values
-#### Sorting by a MultiIndex column
+Sorting in pandas is a straightforward yet essential operation for organizing your data in a specific order. You can sort data in a `DataFrame` or `Series` by one or more columns, either in ascending or descending order. Below are details on how to use sorting methods effectively in pandas.
+
+### **1. Sorting a Series**
+
+To sort a `Series`, you can use the `sort_values()` method. This method sorts the values in the Series and returns a new sorted Series.
+
+#### **Example: Sorting a Series**
+
+```python
+import pandas as pd
+
+# Create a Series
+s = pd.Series([3, 1, 4, 1, 5, 9, 2, 6, 5])
+
+# Sort the Series in ascending order
+sorted_s = s.sort_values()
+
+print(sorted_s)
+```
+
+Output:
+```
+1    1
+3    1
+0    3
+2    4
+6    5
+4    5
+7    6
+5    9
+dtype: int64
+```
+
+### **2. Sorting a DataFrame**
+
+To sort a `DataFrame`, you can also use the `sort_values()` method. You can specify one or more columns to sort by, as well as the sort order (ascending or descending).
+
+#### **Example: Sorting a DataFrame by One Column**
+
+```python
+# Create a DataFrame
+df = pd.DataFrame({
+    'A': [3, 1, 4, 1, 5],
+    'B': ['dog', 'cat', 'bird', 'ant', 'elephant']
+})
+
+# Sort the DataFrame by column 'A' in ascending order
+sorted_df = df.sort_values(by='A')
+
+print(sorted_df)
+```
+
+Output:
+```
+   A        B
+1  1      cat
+3  1      ant
+0  3      dog
+2  4     bird
+4  5  elephant
+```
+
+### **3. Sorting by Multiple Columns**
+
+You can also sort a `DataFrame` by multiple columns by passing a list of column names to the `by` parameter. The order of the columns in the list determines the sorting priority.
+
+#### **Example: Sorting by Multiple Columns**
+
+```python
+# Create a DataFrame with multiple columns
+df = pd.DataFrame({
+    'A': [3, 1, 4, 1, 5],
+    'B': ['dog', 'cat', 'bird', 'ant', 'elephant'],
+    'C': [2, 2, 1, 1, 0]
+})
+
+# Sort by column 'A' first, then by column 'C'
+sorted_df_multi = df.sort_values(by=['A', 'C'])
+
+print(sorted_df_multi)
+```
+
+Output:
+```
+   A        B  C
+1  1      cat  2
+3  1      ant  1
+0  3      dog  2
+2  4     bird  1
+4  5  elephant  0
+```
+
+### **4. Sorting Order**
+
+You can specify the sorting order for each column using the `ascending` parameter. This parameter can take a single boolean value (for all columns) or a list of boolean values (for individual column sorting).
+
+#### **Example: Specifying Sorting Order**
+
+```python
+# Sort 'A' in ascending order and 'B' in descending order
+sorted_df_order = df.sort_values(by=['A', 'B'], ascending=[True, False])
+
+print(sorted_df_order)
+```
+
+Output:
+```
+   A        B  C
+1  1      cat  2
+3  1      ant  1
+0  3      dog  2
+2  4     bird  1
+4  5  elephant  0
+```
+
+### **5. Sorting by Index**
+
+If you want to sort a DataFrame by its index, you can use the `sort_index()` method.
+
+#### **Example: Sorting by Index**
+
+```python
+# Create a DataFrame with a custom index
+df_indexed = pd.DataFrame({
+    'A': [3, 1, 4, 1, 5],
+    'B': ['dog', 'cat', 'bird', 'ant', 'elephant']
+}, index=['C', 'B', 'D', 'A', 'E'])
+
+# Sort the DataFrame by index
+sorted_df_index = df_indexed.sort_index()
+
+print(sorted_df_index)
+```
+
+Output:
+```
+   A        B
+A  1      ant
+B  1      cat
+C  3      dog
+D  4     bird
+E  5  elephant
+```
+
+### **6. In-Place Sorting**
+
+You can sort the DataFrame in place by setting the `inplace` parameter to `True`. This modifies the original DataFrame rather than returning a new one.
+
+#### **Example: In-Place Sorting**
+
+```python
+# Create a DataFrame
+df_inplace = pd.DataFrame({
+    'A': [3, 1, 4, 1, 5],
+    'B': ['dog', 'cat', 'bird', 'ant', 'elephant']
+})
+
+# Sort the DataFrame by column 'A' in place
+df_inplace.sort_values(by='A', inplace=True)
+
+print(df_inplace)
+```
+
+Output:
+```
+   A        B
+1  1      cat
+3  1      ant
+0  3      dog
+2  4     bird
+4  5  elephant
+```
+
+### **7. Handling Missing Values**
+
+By default, missing values (NaNs) are sorted to the end of the sorted DataFrame. You can control this behavior using the `na_position` parameter, which can be set to `'first'` or `'last'`.
+
+#### **Example: Sorting with Missing Values**
+
+```python
+# Create a DataFrame with NaN values
+df_with_nan = pd.DataFrame({
+    'A': [3, 1, 4, None, 5],
+    'B': ['dog', 'cat', 'bird', 'ant', 'elephant']
+})
+
+# Sort the DataFrame by column 'A', placing NaNs first
+sorted_nan_first = df_with_nan.sort_values(by='A', na_position='first')
+
+print(sorted_nan_first)
+```
+
+Output:
+```
+     A        B
+3  NaN      ant
+1  1.0      cat
+0  3.0      dog
+2  4.0     bird
+4  5.0  elephant
+```
+
+
+
+| Method                   | Description                                                  |
+|--------------------------|--------------------------------------------------------------|
+| `sort_values()`          | Sort a Series or DataFrame by values in one or more columns |
+| `sort_index()`           | Sort a DataFrame by its index                               |
+| `ascending`              | Specify the sort order (True for ascending, False for descending) |
+| `inplace`                | Sort in place without returning a new DataFrame             |
+| `na_position`            | Specify where to place NaN values ('first' or 'last')       |
+
+Sorting is a powerful tool in pandas that enables efficient organization of your data for further analysis. By utilizing the sorting methods and parameters effectively, you can quickly find and present your data in the desired order.
+
+
 ### Copying
+Copying in pandas is an essential operation that allows you to create a new object (such as a DataFrame or Series) that is a duplicate of an existing one. This is particularly important when you want to make modifications to a DataFrame or Series without affecting the original data.
+
+### **1. Shallow vs. Deep Copy**
+
+- **Shallow Copy**: This creates a new object, but it does not create copies of the objects that the original object references. Thus, modifications to the data in the copied object may also affect the original object.
+  
+- **Deep Copy**: This creates a new object and recursively copies all objects found in the original. Changes to the data in the copied object do not affect the original.
+
+### **2. Copying a DataFrame or Series**
+
+In pandas, you can copy a DataFrame or Series using the `.copy()` method. By default, `.copy()` performs a deep copy, but you can also create a shallow copy if needed.
+
+#### **Example: Creating a DataFrame**
+
+```python
+import pandas as pd
+
+# Create a DataFrame
+df_original = pd.DataFrame({
+    'A': [1, 2, 3],
+    'B': [4, 5, 6]
+})
+
+print("Original DataFrame:")
+print(df_original)
+```
+
+### **3. Creating a Deep Copy**
+
+```python
+# Create a deep copy of the DataFrame
+df_deep_copy = df_original.copy()
+
+# Modify the copy
+df_deep_copy.loc[0, 'A'] = 10
+
+print("\nDeep Copy DataFrame (Modified):")
+print(df_deep_copy)
+
+print("\nOriginal DataFrame After Deep Copy Modification:")
+print(df_original)
+```
+
+#### **Output**
+```
+Original DataFrame:
+   A  B
+0  1  4
+1  2  5
+2  3  6
+
+Deep Copy DataFrame (Modified):
+    A  B
+0  10  4
+1   2  5
+2   3  6
+
+Original DataFrame After Deep Copy Modification:
+   A  B
+0  1  4
+1  2  5
+2  3  6
+```
+
+### **4. Creating a Shallow Copy**
+
+You can create a shallow copy by passing `deep=False` to the `.copy()` method. Changes to mutable objects in the shallow copy will reflect in the original.
+
+```python
+# Create a shallow copy of the DataFrame
+df_shallow_copy = df_original.copy(deep=False)
+
+# Modify the original DataFrame
+df_original.loc[0, 'A'] = 10
+
+print("\nShallow Copy DataFrame:")
+print(df_shallow_copy)
+
+print("\nOriginal DataFrame After Shallow Copy Modification:")
+print(df_original)
+```
+
+#### **Output**
+```
+Shallow Copy DataFrame:
+   A  B
+0  10  4
+1   2  5
+2   3  6
+
+Original DataFrame After Shallow Copy Modification:
+   A  B
+0  10  4
+1   2  5
+2   3  6
+```
+
+### **5. Copying with Index and Columns**
+
+When you create a copy, you can also choose to copy the index and columns separately by setting `copy=True` for them.
+
+```python
+# Create a new DataFrame with specific index and column copying
+df_custom_copy = df_original.copy(deep=True, index=True, columns=True)
+
+print("\nCustom Copy DataFrame:")
+print(df_custom_copy)
+```
+
+### **6. When to Use Copying**
+
+- **Avoiding Modifications**: When you want to work with a DataFrame without altering the original data.
+- **Creating Subsets**: When you create subsets of your data that you want to modify independently.
+- **Preventing Data Loss**: To prevent unintended changes that can lead to data loss.
+
+### **7. Important Considerations**
+
+- **Memory Usage**: Deep copies consume more memory since they replicate all underlying data.
+- **Performance**: Shallow copies are faster since they do not create a new copy of the underlying data.
+- **Changing Data Types**: If the DataFrame contains complex objects, a shallow copy might lead to unexpected behavior if those objects are mutable.
+
+
+- Use the `.copy()` method to create copies of DataFrames and Series in pandas.
+- A deep copy duplicates all data, while a shallow copy references the same data.
+- Use shallow copies for efficiency when you don't need to change the original data, and deep copies to work independently without affecting the original.
+- Always consider memory usage and performance when deciding between shallow and deep copies.
+
 ### dtypes
-#### defaults
-#### upcasting
-#### astype
-#### object conversion
-### Selecting columns based on dtype
+
+In pandas, the `dtype` (data type) of a DataFrame or Series specifies the type of data contained in that structure. Understanding and managing data types is crucial for efficient data manipulation and analysis. Here's a comprehensive overview of data types in pandas, how to check them, and how to change them when necessary.
+
+### **1. Common Data Types in Pandas**
+
+Pandas supports several data types, which can be broadly categorized as follows:
+
+- **Integer Types**:
+  - `int64`: 64-bit signed integer.
+  - `int32`: 32-bit signed integer (less common).
+
+- **Floating Point Types**:
+  - `float64`: 64-bit floating point.
+  - `float32`: 32-bit floating point (less common).
+
+- **Boolean Type**:
+  - `bool`: Represents boolean values (`True` or `False`).
+
+- **Object Type**:
+  - `object`: General type for text or mixed types, typically used for strings.
+
+- **String Type**:
+  - `string`: A dedicated string data type introduced in newer versions of pandas (1.0+).
+
+- **Datetime and Timedelta Types**:
+  - `datetime64[ns]`: Represents date and time.
+  - `timedelta[ns]`: Represents differences between dates and times.
+
+- **Categorical Type**:
+  - `category`: A data type for categorical data, which can save memory and improve performance when the number of unique values is small compared to the total number of values.
+
+### **2. Checking Data Types**
+
+You can easily check the data types of a DataFrame's columns or a Series using the `.dtypes` attribute.
+
+#### **Example: Checking Data Types of a DataFrame**
+
+```python
+import pandas as pd
+
+# Create a DataFrame
+df = pd.DataFrame({
+    'A': [1, 2, 3],
+    'B': [4.0, 5.5, 6.2],
+    'C': ['dog', 'cat', 'bird'],
+    'D': [True, False, True],
+    'E': pd.to_datetime(['2023-01-01', '2023-02-01', '2023-03-01'])
+})
+
+# Check data types
+print("Data Types:")
+print(df.dtypes)
+```
+
+#### **Output**
+```
+Data Types:
+A             int64
+B           float64
+C            object
+D              bool
+E    datetime64[ns]
+dtype: object
+```
+
+### **3. Changing Data Types**
+
+You can change the data type of a column in a DataFrame using the `.astype()` method. This is useful when you need to convert data types for analysis or when preparing data for machine learning models.
+
+#### **Example: Changing Data Types**
+
+```python
+# Convert column 'A' to float
+df['A'] = df['A'].astype(float)
+
+# Convert column 'C' to category
+df['C'] = df['C'].astype('category')
+
+print("\nData Types After Conversion:")
+print(df.dtypes)
+```
+
+#### **Output**
+```
+Data Types After Conversion:
+A             float64
+B           float64
+C          category
+D              bool
+E    datetime64[ns]
+dtype: object
+```
+
+### **4. Handling Categorical Data**
+
+Categorical data can save memory and improve performance. You can convert a column to the categorical type for optimization.
+
+#### **Example: Converting to Categorical**
+
+```python
+# Convert column 'C' to categorical
+df['C'] = df['C'].astype('category')
+
+print("\nData Types After Categorical Conversion:")
+print(df.dtypes)
+
+print("\nUnique Categories in 'C':")
+print(df['C'].cat.categories)
+```
+
+#### **Output**
+```
+Data Types After Categorical Conversion:
+A             float64
+B           float64
+C          category
+D              bool
+E    datetime64[ns]
+dtype: object
+
+Unique Categories in 'C':
+Index(['bird', 'cat', 'dog'], dtype='object')
+```
+
+### **5. Handling Missing Values and Data Types**
+
+When a column contains missing values, the data type can change. For example, if a column of integers has `NaN`, its type will be promoted to `float` since `NaN` is a float.
+
+#### **Example: Handling Missing Values**
+
+```python
+# Create a DataFrame with missing values
+df_nan = pd.DataFrame({
+    'A': [1, 2, None],
+    'B': [4.0, None, 6.2],
+})
+
+print("\nData Types with Missing Values:")
+print(df_nan.dtypes)
+```
+
+#### **Output**
+```
+Data Types with Missing Values:
+A    float64
+B    float64
+dtype: object
+```
+
+
+- **Data Types**: Understanding data types is essential for efficient data manipulation in pandas. Common types include integers, floats, booleans, objects, strings, dates, and categories.
+- **Checking Types**: Use `.dtypes` to check the data types of columns in a DataFrame or Series.
+- **Changing Types**: Use `.astype()` to convert data types when necessary.
+- **Handling Categorical Data**: Use the categorical type for memory efficiency and performance improvement.
+- **Missing Values**: Missing values can affect the data type; for instance, integers with `NaN` will be converted to floats.
+
+Understanding and managing data types effectively will help you work more efficiently with pandas and prepare your data for analysis or machine learning tasks.
+
 
 
 
